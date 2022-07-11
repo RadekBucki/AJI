@@ -23,6 +23,11 @@ footer {
 img {
     max-height: 180px;
     padding: 10px;
+    opacity: 0.5;
+}
+
+img:hover {
+    opacity: 1.0;
 }
 
 section {
