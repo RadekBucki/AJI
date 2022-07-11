@@ -9,22 +9,28 @@
 </head>
 <body>
     <div>
-        <label>Search</label>
+        <label for="inputSearch">Search</label>
         <input type="text" id="inputSearch" placeholder="Type Your seach here..."/>
     </div>
-    <h1>MyNotes</h1>
-    <form>
-        <label>Title</label>
-        <input type="text" id="inputTitle"/>
-        <label>Description</label>
-        <input type="text" id="inputDescription"/>
-        <label>Place</label>
-        <input type="text" id="inputPlace"/>
-        <label>Due date</label>
-        <input type="date" id="inputDate"/>
-        <input type="button" value="add"
-               onclick="addTodo()"/>
-    </form>
-    <div id="todoListView"></div>
+    <table>
+        <caption><h1>MyNotes</h1></caption>
+        <thead>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Place</th>
+            <th>Due date</th>
+            <th>Action</th>
+        </thead>
+        <tbody id="todoListView"></tbody>
+        <tfoot>
+            <form>
+                <td><input type="text" id="inputTitle"/></td>
+                <td><input type="text" id="inputDescription"/></td>
+                <td><input type="text" id="inputPlace"/></td>
+                <td><input type="date" id="inputDate"/></td>
+                <td><input type="button" value="+" onclick="addTodo()"/></td>
+            </form>
+        </tfoot>
+    </table>
 </body>
 </html>

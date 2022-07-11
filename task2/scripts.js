@@ -56,13 +56,26 @@ let updateTodoList = function () {
             (todoList[todo].title.includes(filterInput.value)) ||
             (todoList[todo].description.includes(filterInput.value))
         ) {
-            let newElement = document.createElement("p");
-            let newContent = document.createTextNode(todoList[todo].title + " " +
-                todoList[todo].description);
-            newElement.appendChild(newContent);
-            todoListDiv.appendChild(newElement);
+            let row = document.createElement("tr");
+
+            let title = document.createElement("td");
+            title.appendChild(document.createTextNode(todoList[todo].title));
+            row.appendChild(title);
+
+            let description = document.createElement("td");
+            description.appendChild(document.createTextNode(todoList[todo].description));
+            row.appendChild(description);
+
+            let place = document.createElement("td");
+            place.appendChild(document.createTextNode(todoList[todo].place));
+            row.appendChild(place);
+
+            let dueDate = document.createElement("td");
+            dueDate.appendChild(document.createTextNode(todoList[todo].dueDate));
+            row.appendChild(dueDate);
 
             //delete button
+            let action = document.createElement("td");
             let newDeleteButton = document.createElement("input");
             newDeleteButton.type = "button";
             newDeleteButton.value = "x";
@@ -71,7 +84,9 @@ let updateTodoList = function () {
                     deleteTodo(todo);
                 }
             );
-            newElement.appendChild(newDeleteButton);
+            action.appendChild(newDeleteButton)
+            row.appendChild(action);
+            todoListDiv.appendChild(row);
         }
     }
 }
