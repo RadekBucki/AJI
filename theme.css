@@ -9,6 +9,9 @@ body {
     max-width: 960px;
     margin: auto;
     font-family: verdana;
+    border:2px solid;
+    border-color:#eeeeee;
+    border-radius:3px;
 }
 
 nav {
