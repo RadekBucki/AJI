@@ -23,7 +23,21 @@ let initList = function () {
         );
 }
 
-initList();
+// initList();
+$.ajax({
+    url: 'https://api.jsonbin.io/b/62cc706df023111c7073297e/latest',
+    type: 'GET',
+    headers: { //Required only if you are trying to access a private bin
+        'secret-key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
+    },
+    success: (data) => {
+        // console.log(data);
+        todoList = data
+    },
+    error: (err) => {
+        console.log(err.responseJSON);
+    }
+});
 
 let updateTodoList = function () {
     let todoListDiv =
@@ -83,10 +97,30 @@ let addTodo = function () {
     //add item to the list
     todoList.push(newTodo);
     window.localStorage.setItem("todos", JSON.stringify(todoList));
+    updateJSONbin();
 }
 
 let deleteTodo = function (index) {
     todoList.splice(index, 1);
+    updateJSONbin();
 }
 
 setInterval(updateTodoList, 1000);
+
+let updateJSONbin = function () {
+    $.ajax({
+        url: 'https://api.jsonbin.io/b/62cc706df023111c7073297e',
+        type: 'PUT',
+        headers: { //Required only if you are trying to access a private bin
+            'secret-key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(todoList),
+        success: (data) => {
+            console.log(data);
+        },
+        error: (err) => {
+            console.log(err.responseJSON);
+        }
+    });
+}
