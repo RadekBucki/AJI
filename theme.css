@@ -9,3 +9,8 @@ body {
     margin: auto;
     font-family: verdana;
 }
+
+nav {
+    text-align: center;
+    background-color: #eeeeee;
+}
