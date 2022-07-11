@@ -16,6 +16,11 @@ nav {
 }
 
 footer {
-    text-align:center;
-    color:#444444;
+    text-align: center;
+    color: #444444;
+}
+
+img {
+    max-height: 180px;
+    padding: 10px;
 }
