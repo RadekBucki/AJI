@@ -28,3 +28,8 @@ img {
 section {
     text-align: center;
 }
+
+article {
+    text-align: justify;
+    margin: 10px;
+}
