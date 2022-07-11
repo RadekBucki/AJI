@@ -8,9 +8,8 @@ header {
 body {
     max-width: 960px;
     margin: auto;
-    font-family: verdana;
-    border:2px solid;
-    border-color:#eeeeee;
+    font-family: verdana, serif;
+    border: 2px solid #eeeeee;
     border-radius:3px;
 }
 
@@ -30,8 +29,7 @@ img {
     padding: 10px;
     opacity: 0.5;
     border-radius: 4px;
-    border: 1px solid;
-    border-color: #dddddd;
+    border: 1px solid #dddddd;
     transition: opacity 1s;
 }
 
