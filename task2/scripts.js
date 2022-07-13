@@ -2,42 +2,22 @@
 let todoList = []; //declares a new array for Your todo list
 
 let initList = function () {
-    let savedList = window.localStorage.getItem("todos");
-    if (savedList != null)
-        todoList = JSON.parse(savedList);
-    else
-        todoList.push(
-            {
-                title: "Learn JS",
-                description: "Create a demo application for my TODO's",
-                place: "445",
-                dueDate: new Date(2019, 10, 16)
-            },
-            {
-                title: "Lecture test",
-                description: "Quick test from the first three lectures",
-                place: "F6",
-                dueDate: new Date(2019, 10, 17)
-            }
-            // of course the lecture test mentioned above will not take place
-        );
+    $.ajax({
+        url: 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e/latest',
+        type: 'GET',
+        headers: { //Required only if you are trying to access a private bin
+            'X-Master-Key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
+        },
+        success: (data) => {
+            todoList = data.record
+        },
+        error: (err) => {
+            console.log(err.responseJSON);
+        }
+    });
 }
 
-// initList();
-$.ajax({
-    url: 'https://api.jsonbin.io/b/62cc706df023111c7073297e/latest',
-    type: 'GET',
-    headers: { //Required only if you are trying to access a private bin
-        'secret-key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
-    },
-    success: (data) => {
-        // console.log(data);
-        todoList = data
-    },
-    error: (err) => {
-        console.log(err.responseJSON);
-    }
-});
+initList();
 
 let updateTodoList = function () {
     let todoListDiv =
@@ -127,7 +107,7 @@ let updateJSONbin = function () {
         url: 'https://api.jsonbin.io/b/62cc706df023111c7073297e',
         type: 'PUT',
         headers: { //Required only if you are trying to access a private bin
-            'secret-key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
+            'X-Master-Key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
         },
         contentType: 'application/json',
         data: JSON.stringify(todoList),
