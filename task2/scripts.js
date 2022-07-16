@@ -1,7 +1,7 @@
 "use strict"
 let todoList = []; //declares a new array for Your todo list
 
-let initList = function () {
+let initList = () => {
     $.ajax({
         url: 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e/latest',
         type: 'GET',
@@ -9,7 +9,7 @@ let initList = function () {
             'X-Master-Key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
         },
         success: (data) => {
-            todoList = data.record
+            todoList = data.record;
         },
         error: (err) => {
             console.log(err.responseJSON);
@@ -19,79 +19,41 @@ let initList = function () {
 
 initList();
 
-let updateTodoList = function () {
-    let todoListDiv =
-        document.getElementById("todoListView");
-
+let updateTodoList = () => {
+    let todoListDiv = $("#todoListView");
     //remove all elements
-    while (todoListDiv.firstChild) {
-        todoListDiv.removeChild(todoListDiv.firstChild);
-    }
+    todoListDiv.empty();
 
     //add all elements
-    let filterInput = document.getElementById("inputSearch");
+    let filterInput = $("#inputSearch").val();
     for (let todo in todoList) {
         if (
-            (filterInput.value == "") ||
-            (todoList[todo].title.includes(filterInput.value)) ||
-            (todoList[todo].description.includes(filterInput.value))
+            (filterInput === "") ||
+            (todoList[todo].title.includes(filterInput)) ||
+            (todoList[todo].description.includes(filterInput))
         ) {
-            let row = document.createElement("tr");
-
-            let title = document.createElement("td");
-            title.appendChild(document.createTextNode(todoList[todo].title));
-            row.appendChild(title);
-
-            let description = document.createElement("td");
-            description.appendChild(document.createTextNode(todoList[todo].description));
-            row.appendChild(description);
-
-            let place = document.createElement("td");
-            place.appendChild(document.createTextNode(todoList[todo].place));
-            row.appendChild(place);
-
-            let dueDate = document.createElement("td");
-            dueDate.appendChild(document.createTextNode(todoList[todo].dueDate));
-            row.appendChild(dueDate);
-
-            //delete button
-            let action = document.createElement("td");
-            let newDeleteButton = document.createElement("input");
-            newDeleteButton.type = "button";
-            newDeleteButton.value = "x";
-            newDeleteButton.addEventListener("click",
-                function () {
-                    deleteTodo(todo);
-                }
+            todoListDiv.append(
+                "<tr>" +
+                "<td>" + todoList[todo].title + "</td>" +
+                "<td>" + todoList[todo].description + "</td>" +
+                "<td>" + todoList[todo].place + "</td>" +
+                "<td>" + (new Date(todoList[todo].dueDate)).toLocaleString() + "</td>" +
+                "<td>" +
+                "<button class='btn btn-danger float-end' onclick='deleteTodo(" + todo + ")'>" +
+                "<i class='bi bi-trash''></i>"+
+                "</button>" +
+                "</td>" +
+                "</tr>"
             );
-            action.appendChild(newDeleteButton)
-            row.appendChild(action);
-            todoListDiv.appendChild(row);
+            console.log(todoListDiv);
         }
     }
 }
 
-let addTodo = function () {
-    //get the elements in the form
-    let inputTitle = document.getElementById("inputTitle");
-    let inputDescription = document.getElementById("inputDescription");
-    let inputPlace = document.getElementById("inputPlace");
-    let inputDate = document.getElementById("inputDate");
-    //get the values from the form
-    let newTitle = inputTitle.value;
-    let newDescription = inputDescription.value;
-    let newPlace = inputPlace.value;
-    let newDate = new Date(inputDate.value);
-    //create new item
-    let newTodo = {
-        title: newTitle,
-        description: newDescription,
-        place: newPlace,
-        dueDate: newDate
-    };
-    //add item to the list
+let addTodo = () => {
+    let newTodo = {};
+    $("#newRecord>input").each(function() {newTodo[this.name] = $(this).val()});
     todoList.push(newTodo);
-    window.localStorage.setItem("todos", JSON.stringify(todoList));
     updateJSONbin();
 }
 
@@ -100,11 +62,9 @@ let deleteTodo = function (index) {
     updateJSONbin();
 }
 
-setInterval(updateTodoList, 1000);
-
-let updateJSONbin = function () {
+let updateJSONbin = () => {
     $.ajax({
-        url: 'https://api.jsonbin.io/b/62cc706df023111c7073297e',
+        url: 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e/latest',
         type: 'PUT',
         headers: { //Required only if you are trying to access a private bin
             'X-Master-Key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
@@ -119,3 +79,5 @@ let updateJSONbin = function () {
         }
     });
 }
+
+setInterval(updateTodoList, 1000);
