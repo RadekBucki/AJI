@@ -30,7 +30,8 @@ let updateTodoList = () => {
         if (
             (filterInput === "") ||
             (todoList[todo].title.includes(filterInput)) ||
-            (todoList[todo].description.includes(filterInput))
+            (todoList[todo].description.includes(filterInput)) ||
+            (todoList[todo].place.includes(filterInput))
         ) {
             todoListDiv.append(
                 "<tr>" +
@@ -40,31 +41,50 @@ let updateTodoList = () => {
                 "<td>" + (new Date(todoList[todo].dueDate)).toLocaleString() + "</td>" +
                 "<td>" +
                 "<button class='btn btn-danger float-end' onclick='deleteTodo(" + todo + ")'>" +
-                "<i class='bi bi-trash''></i>"+
+                "<i class='bi bi-trash''></i>" +
                 "</button>" +
                 "</td>" +
                 "</tr>"
             );
-            console.log(todoListDiv);
         }
+    }
+    if ($("body").height() > $(window).height()) {
+        console.log("height");
     }
 }
 
 let addTodo = () => {
     let newTodo = {};
-    $("#newRecord>input").each(function() {newTodo[this.name] = $(this).val()});
+    let isSomethingInvalid = false;
+    $("#newRecord>input").each(function (i, value) {
+        let name = value.name;
+        value = $(value);
+        let val = value.val();
+        value.removeClass("is-valid");
+        value.removeClass("is-invalid");
+        if (val === "") {
+            value.addClass("is-invalid");
+            isSomethingInvalid = true;
+        } else {
+            value.addClass("is-valid");
+        }
+        newTodo[name] = val;
+    });
+    if (isSomethingInvalid) {
+        return;
+    }
     todoList.push(newTodo);
     updateJSONbin();
 }
 
-let deleteTodo = function (index) {
+let deleteTodo = (index) => {
     todoList.splice(index, 1);
     updateJSONbin();
 }
 
 let updateJSONbin = () => {
     $.ajax({
-        url: 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e/latest',
+        url: 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e',
         type: 'PUT',
         headers: { //Required only if you are trying to access a private bin
             'X-Master-Key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'

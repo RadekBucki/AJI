@@ -40,8 +40,8 @@
                       <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
                     </svg>
                 </span>
-                <input type="date" aria-label="First name" class="form-control">
-                <input type="date" aria-label="Last name" class="form-control">
+                <input type="datetime-local" name="start-date" class="form-control">
+                <input type="datetime-local" name="end-date" class="form-control">
             </div>
         </div>
         <h2 class="h2">TODO List</h2>
@@ -58,11 +58,13 @@
                 <tfoot class="table-success">
                     <td colspan="5">
                         <div class="input-group" id="newRecord">
-                            <input class="form-control" type="text" placeholder="Title" name="title"/>
-                            <input class="form-control" type="text" placeholder="Description" name="descritpion"/>
-                            <input class="form-control" type="text" placeholder="Place" id="inputPlace" name="place"/>
+                            <input class="form-control" type="text" placeholder="Title" name="title" required/>
+                            <input class="form-control" type="text" placeholder="Description" name="description"
+                                   required/>
+                            <input class="form-control" type="text" placeholder="Place" id="inputPlace" name="place"
+                                   required/>
                             <input class="form-control" type="datetime-local" placeholder="DueDate" id="inputDate"
-                                   name="dueDate"/>
+                                   name="dueDate" required/>
                             <button type="button" class="btn btn-success" onclick="addTodo()">
                                 <i class="bi bi-plus-lg"></i>
                             </button>
