@@ -26,19 +26,28 @@ let updateTodoList = () => {
 
     //add all elements
     let filterInput = $("#inputSearch").val();
+    let startDate = $("#startDate").val();
+    let endDate = $("#endDate").val();
     for (let todo in todoList) {
+        let dueDate = Date.parse(todoList[todo].dueDate);
         if (
-            (filterInput === "") ||
-            (todoList[todo].title.includes(filterInput)) ||
-            (todoList[todo].description.includes(filterInput)) ||
-            (todoList[todo].place.includes(filterInput))
+            (
+                filterInput === "" ||
+                todoList[todo].title.includes(filterInput) ||
+                todoList[todo].description.includes(filterInput) ||
+                todoList[todo].place.includes(filterInput)
+            ) &&
+            (
+                (startDate === "" || Date.parse(startDate) <= dueDate) &&
+                (endDate === "" || Date.parse(endDate) >= dueDate)
+            )
         ) {
             todoListDiv.append(
                 "<tr>" +
                 "<td>" + todoList[todo].title + "</td>" +
                 "<td>" + todoList[todo].description + "</td>" +
                 "<td>" + todoList[todo].place + "</td>" +
-                "<td>" + (new Date(todoList[todo].dueDate)).toLocaleString() + "</td>" +
+                "<td>" + dueDate.toLocaleString() + "</td>" +
                 "<td>" +
                 "<button class='btn btn-danger float-end' onclick='deleteTodo(" + todo + ")'>" +
                 "<i class='bi bi-trash''></i>" +
@@ -48,8 +57,16 @@ let updateTodoList = () => {
             );
         }
     }
-    if ($("body").height() > $(window).height()) {
-        console.log("height");
+    let bodyHeight = $("body").height();
+    if ($("footer").hasClass("fixed-bottom")) {
+        bodyHeight += $("footer").height();
+    }
+    if (bodyHeight < $(window).height()) {
+        $("footer").addClass("fixed-bottom");
+        console.log("window");
+    } else {
+        $("footer").removeClass("fixed-bottom");
+        console.log("body");
     }
 }
 
