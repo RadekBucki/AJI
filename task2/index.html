@@ -24,21 +24,13 @@
             <h2 class="h2">Filters</h2>
             <div class="input-group mb-2">
                 <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-search"
-                         viewBox="0 0 16 16">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                    </svg>
+                    <i class="bi bi-search"></i>
                 </span>
-                <input class="form-control" type="text" id="inputSearch" placeholder="Search phrase"/>
+                <input class="form-control" type="text" id="inputSearch" placeholder="Search phrase" />
             </div>
             <div class="input-group">
                 <span class="input-group-text">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-calendar-range" viewBox="0 0 16 16">
-                      <path d="M9 7a1 1 0 0 1 1-1h5v2h-5a1 1 0 0 1-1-1zM1 9h4a1 1 0 0 1 0 2H1V9z"/>
-                      <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4H1z"/>
-                    </svg>
+                    <i class="bi bi-calendar-range"></i>
                 </span>
                 <input type="datetime-local" id="startDate" class="form-control">
                 <input type="datetime-local" id="endDate" class="form-control">
@@ -58,13 +50,13 @@
                 <tfoot class="table-success">
                     <td colspan="5">
                         <div class="input-group" id="newRecord">
-                            <input class="form-control" type="text" placeholder="Title" name="title" required/>
+                            <input class="form-control" type="text" placeholder="Title" name="title" required />
                             <input class="form-control" type="text" placeholder="Description" name="description"
-                                   required/>
+                                   required />
                             <input class="form-control" type="text" placeholder="Place" id="inputPlace" name="place"
-                                   required/>
+                                   required />
                             <input class="form-control" type="datetime-local" placeholder="DueDate" id="inputDate"
-                                   name="dueDate" required/>
+                                   name="dueDate" required />
                             <button type="button" class="btn btn-success" onclick="addTodo()">
                                 <i class="bi bi-plus-lg"></i>
                             </button>
@@ -76,7 +68,7 @@
     </div>
     <footer class="page-footer bg-primary text-white ">
         <div class="text-center py-3">
-            Radosław Bucki<br/>
+            Radosław Bucki<br />
             Applications in Interpreted Languages 2022
         </div>
     </footer>

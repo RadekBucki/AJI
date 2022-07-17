@@ -38,8 +38,12 @@ let updateTodoList = () => {
                 todoList[todo].place.includes(filterInput)
             ) &&
             (
-                (startDate === "" || Date.parse(startDate) <= dueDate) &&
-                (endDate === "" || Date.parse(endDate) >= dueDate)
+                (
+                    startDate === "" || Date.parse(startDate) <= dueDate
+                ) &&
+                (
+                    endDate === "" || Date.parse(endDate) >= dueDate
+                )
             )
         ) {
             todoListDiv.append(
