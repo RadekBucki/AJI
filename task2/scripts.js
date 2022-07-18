@@ -51,7 +51,7 @@ let updateTodoList = () => {
                 "<td>" + todoList[todo].title + "</td>" +
                 "<td>" + todoList[todo].description + "</td>" +
                 "<td>" + todoList[todo].place + "</td>" +
-                "<td>" + dueDate.toLocaleString() + "</td>" +
+                "<td>" + (new Date(dueDate)).toLocaleString() + "</td>" +
                 "<td>" +
                 "<button class='btn btn-danger float-end' onclick='deleteTodo(" + todo + ")'>" +
                 "<i class='bi bi-trash''></i>" +
