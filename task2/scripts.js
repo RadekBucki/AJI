@@ -1,12 +1,14 @@
 "use strict"
 let todoList = []; //declares a new array for Your todo list
+const binUrl = 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e';
+const xMasterKey = '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC';
 
 let initList = () => {
     $.ajax({
-        url: 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e/latest',
+        url: binUrl + '/latest',
         type: 'GET',
-        headers: { //Required only if you are trying to access a private bin
-            'X-Master-Key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
+        headers: {
+            'X-Master-Key': xMasterKey
         },
         success: (data) => {
             todoList = data.record;
@@ -51,7 +53,9 @@ let updateTodoList = () => {
                 "<td>" + todoList[todo].title + "</td>" +
                 "<td>" + todoList[todo].description + "</td>" +
                 "<td>" + todoList[todo].place + "</td>" +
-                "<td>" + (new Date(dueDate)).toLocaleString() + "</td>" +
+                "<td>" + (
+                    new Date(dueDate)
+                ).toLocaleString() + "</td>" +
                 "<td>" +
                 "<button class='btn btn-danger float-end' onclick='deleteTodo(" + todo + ")'>" +
                 "<i class='bi bi-trash''></i>" +
@@ -62,15 +66,14 @@ let updateTodoList = () => {
         }
     }
     let bodyHeight = $("body").height();
-    if ($("footer").hasClass("fixed-bottom")) {
-        bodyHeight += $("footer").height();
+    let footer = $("footer");
+    if (footer.hasClass("fixed-bottom")) {
+        bodyHeight += footer.height();
     }
     if (bodyHeight < $(window).height()) {
-        $("footer").addClass("fixed-bottom");
-        console.log("window");
+        footer.addClass("fixed-bottom");
     } else {
-        $("footer").removeClass("fixed-bottom");
-        console.log("body");
+        footer.removeClass("fixed-bottom");
     }
 }
 
@@ -105,16 +108,13 @@ let deleteTodo = (index) => {
 
 let updateJSONbin = () => {
     $.ajax({
-        url: 'https://api.jsonbin.io/v3/b/62cc706df023111c7073297e',
+        url: binUrl,
         type: 'PUT',
-        headers: { //Required only if you are trying to access a private bin
-            'X-Master-Key': '$2b$10$FddDHZtdilm.WmOZjIAGGOR.1kiXHobHN/zHw0KR/QOQjEmbWGcuC'
+        headers: {
+            'X-Master-Key': xMasterKey
         },
         contentType: 'application/json',
         data: JSON.stringify(todoList),
-        success: (data) => {
-            console.log(data);
-        },
         error: (err) => {
             console.log(err.responseJSON);
         }
