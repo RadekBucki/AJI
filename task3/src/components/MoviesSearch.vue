@@ -27,11 +27,23 @@
       <input type="button" class="btn btn-info col-sm-12" value="Szukaj" />
     </div>
   </form>
+  <MoviesTable :movies="json"/>
 </template>
 
 <script>
+import MoviesTable from "@/components/MoviesTable";
+
+import json from "@/assets/movies.json"
 export default {
-  name: "MoviesSearch"
+  name: "MoviesSearch",
+  data(){
+    return {
+      json: json
+    }
+  },
+  components: {
+    MoviesTable
+  }
 }
 </script>
 

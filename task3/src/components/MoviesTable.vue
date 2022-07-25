@@ -9,12 +9,12 @@
       </tr>
     </thead>
     <tbody>
-      <!--        <tr v-for="movie in movies">-->
-      <!--          <td>{{ movie.title }}</td>-->
-      <!--          <td>{{ movie.year }}</td>-->
-      <!--          <td>{{ movie.cast }}</td>-->
-      <!--          <td>{{ movie.genres }}</td>-->
-      <!--        </tr>-->
+      <tr v-for="movie in movies">
+        <td>{{ movie.title }}</td>
+        <td>{{ movie.year }}</td>
+        <td>{{ movie.cast.join('\n') }}</td>
+        <td>{{ movie.genres.join('\n') }}</td>
+      </tr>
     </tbody>
   </table>
   <em class="task">W tabeli należy poprawić wyświetlanie pól z obsadą i gatunkiem. Należy opuścić nawiasy
@@ -23,8 +23,11 @@
 
 <script>
 export default {
-  name: "MoviesTable"
-}
+  name: "MoviesTable",
+  props: {
+    movies: Array
+  }
+};
 </script>
 
 <style scoped>
