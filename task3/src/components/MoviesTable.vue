@@ -12,13 +12,19 @@
       <tr v-for="movie in movies">
         <td>{{ movie.title }}</td>
         <td>{{ movie.year }}</td>
-        <td>{{ movie.cast.join('\n') }}</td>
-        <td>{{ movie.genres.join('\n') }}</td>
+        <td>
+          <span v-for="actor in movie.cast">
+            {{ actor }}<br />
+          </span>
+        </td>
+        <td>
+          <span v-for="genre in movie.genres">
+            {{ genre }}<br />
+          </span>
+        </td>
       </tr>
     </tbody>
   </table>
-  <em class="task">W tabeli należy poprawić wyświetlanie pól z obsadą i gatunkiem. Należy opuścić nawiasy
-                   kwadratowe</em>
 </template>
 
 <script>
@@ -31,5 +37,7 @@ export default {
 </script>
 
 <style scoped>
-
+  table {
+    width: 100%;
+  }
 </style>
