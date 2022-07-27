@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="movie in movies">
+      <tr v-for="movie in displayedMovies">
         <td>{{ movie.title }}</td>
         <td>{{ movie.year }}</td>
         <td>
@@ -24,6 +24,16 @@
         </td>
       </tr>
     </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="4" class="text-center">
+          <button class="btn btn-outline-info" @click="showMore">
+            Pokaż więcej<br />
+            <i class="bi bi-chevron-down"></i>
+          </button>
+        </td>
+      </tr>
+    </tfoot>
   </table>
 </template>
 
@@ -32,12 +42,24 @@ export default {
   name: "MoviesTable",
   props: {
     movies: Array
+  },
+  data() {
+    return {
+      counter: 10,
+      displayedMovies: this.movies.slice(0, 10)
+    }
+  },
+  methods: {
+    showMore() {
+      this.counter += 10;
+      this.displayedMovies = this.movies.slice(0, this.counter);
+    }
   }
 };
 </script>
 
 <style scoped>
-  table {
-    width: 100%;
-  }
+table {
+  width: 100%;
+}
 </style>
