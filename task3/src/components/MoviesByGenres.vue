@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <h1>Filmy wg gatunku</h1>
-    <span v-for="(movies, genre) in moviesByGenres">
+  <h1>Filmy wg gatunku</h1>
+  <span v-for="(movies, genre) in moviesByGenres">
     <ListDisplay :title="genre" :items="movies" />
   </span>
-  </div>
 </template>
 
 <script>

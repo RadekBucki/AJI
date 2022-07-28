@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <h2>{{ title }}</h2>
-    <ol>
-      <li v-for="moviteme in items.slice(0,counter)">{{ moviteme }}</li>
-    </ol>
-    <button class="btn btn-outline-info" @click="showMore()" v-show="items.length > counter">
-      Pokaż więcej<br />
-      <i class="bi bi-chevron-down"></i>
-    </button>
-  </div>
+  <h2>{{ title }}</h2>
+  <ol>
+    <li v-for="item in items.slice(0,counter)">{{ item }}</li>
+  </ol>
+  <button class="btn btn-outline-info" @click="showMore()" v-show="items.length > counter">
+    Pokaż więcej<br />
+    <i class="bi bi-chevron-down"></i>
+  </button>
 </template>
 
 <script>
