@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: "MoviesTable",
+  name: "Table",
   props: {
     movies: Array
   },

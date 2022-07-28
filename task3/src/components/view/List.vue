@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: "ListDisplay",
+  name: "List",
   props: {
     title: String,
     items: Array

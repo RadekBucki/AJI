@@ -35,7 +35,7 @@
 
 <script>
 import {_} from 'vue-underscore';
-import MoviesTable from "@/components/MoviesTable";
+import MoviesTable from "@/components/view/Table";
 
 import json from "@/assets/movies.json"
 

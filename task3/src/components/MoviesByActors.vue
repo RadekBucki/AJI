@@ -8,7 +8,7 @@
 <script>
 import {_} from 'vue-underscore';
 import json from "@/assets/movies.json"
-import ListDisplay from "@/components/ListDisplay";
+import ListDisplay from "@/components/view/List";
 
 let moviesByActors = {};
 _.forEach(json, (record) => {
