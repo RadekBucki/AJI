@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="movie in displayedMovies">
+      <tr v-for="movie in movies.slice(0, counter)">
         <td>{{ movie.title }}</td>
         <td>{{ movie.year }}</td>
         <td>
@@ -46,13 +46,11 @@ export default {
   data() {
     return {
       counter: 10,
-      displayedMovies: this.movies.slice(0, 10)
     }
   },
   methods: {
     showMore() {
       this.counter += 10;
-      this.displayedMovies = this.movies.slice(0, this.counter);
     }
   }
 };
