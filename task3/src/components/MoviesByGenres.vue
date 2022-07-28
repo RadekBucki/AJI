@@ -1,23 +1,42 @@
 <template>
-  <h1>Filmy wg gatunku</h1>
-  <em class="task">
-    Należy wyświetlić filmografię wg gatunku w formie listy, np.
-    <p>Animated</p>
-    <ol>
-      <li>Cheese Chasers</li>
-      <li>Southbound Duckling</li>
-    </ol>
-    <p>Comedy</p>
-    <ol>
-      <li>Special Delivery</li>
-    </ol>
-    Brakujące dane obsłużyć wg uznania.
-  </em>
+  <div>
+    <h1>Filmy wg gatunku</h1>
+    <span v-for="(movies, genre) in moviesByGenres">
+    <ListDisplay :title="genre" :items="movies" />
+  </span>
+  </div>
 </template>
 
 <script>
+import {_} from 'vue-underscore';
+import json from "@/assets/movies.json"
+import ListDisplay from "@/components/ListDisplay";
+
+let moviesByGenres = {};
+_.forEach(json, (record) => {
+  _.forEach(record.genres, (genre) => {
+    if (genre in moviesByGenres) {
+      moviesByGenres[genre].push(record.title);
+    } else {
+      moviesByGenres[genre] = [record.title];
+    }
+  });
+});
+
+let counter = {}
+_.forEach(moviesByGenres, (movies, genre) => {
+  counter[genre] = 10;
+});
 export default {
-  name: "MoviesByGenres"
+  name: "MoviesByGenres",
+  components: {
+    ListDisplay
+  },
+  data() {
+    return {
+      moviesByGenres: moviesByGenres
+    }
+  }
 }
 </script>
 
