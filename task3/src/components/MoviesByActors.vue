@@ -1,8 +1,10 @@
 <template>
   <h1>Filmy wg obsady</h1>
-  <span v-for="(movies, genre) in moviesByGenres">
-    <ListDisplay :title="genre" :items="movies" />
-  </span>
+  <div class="row">
+    <span v-for="(movies, genre) in moviesByGenres" class="col-lg-3 col-md-4 col-sm-6 pb-5">
+      <ListDisplay :title="genre" :items="movies" />
+    </span>
+  </div>
 </template>
 
 <script>
@@ -21,10 +23,6 @@ _.forEach(json, (record) => {
   });
 });
 
-let counter = {}
-_.forEach(moviesByActors, (movies, genre) => {
-  counter[genre] = 10;
-});
 export default {
   name: "MoviesByActors",
   components: {
