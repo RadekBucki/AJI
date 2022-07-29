@@ -27,7 +27,7 @@
     <tfoot>
       <tr>
         <td colspan="4" class="text-center">
-          <button class="btn btn-outline-info" @click="showMore">
+          <button class="btn btn-outline-info w-100" @click="showMore" v-show="movies.length > counter">
             Pokaż więcej<br />
             <i class="bi bi-chevron-down"></i>
           </button>
