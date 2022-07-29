@@ -2,10 +2,10 @@
   <table class="table-condensed table-hover">
     <thead>
       <tr>
-        <th>Title</th>
-        <th>Production Year</th>
-        <th>Cast</th>
-        <th>Genres</th>
+        <th>Tytuł</th>
+        <th>Rok produkcji</th>
+        <th>Obsada</th>
+        <th>Gatunki</th>
       </tr>
     </thead>
     <tbody>
