@@ -37,13 +37,14 @@
 import {_} from 'vue-underscore';
 import MoviesTable from "@/components/view/Table";
 
-import json from "@/assets/movies.json"
-
 export default {
   name: "MoviesSearch",
+  props: {
+    jsonData: Array,
+  },
   data() {
     return {
-      json: json,
+      json: _.clone(this.$props.jsonData),
       filters: {
         title: '',
         yearFrom: '',
@@ -57,7 +58,7 @@ export default {
   },
   methods: {
     search() {
-      let fullJson = _.clone(json);
+      let fullJson = _.clone(this.$props.jsonData);
       let filters = this.filters;
       this.json = _.filter(fullJson, (record) => {
         return record.title.includes(filters.title) &&

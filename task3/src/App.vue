@@ -1,8 +1,8 @@
 <template>
   <div class="container">
-    <MoviesSearch/>
-    <MoviesBySomething header="Filmy wg gatunku" something="genres" />
-    <MoviesBySomething header="Filmy wg obsady" something="cast" />
+    <MoviesSearch :jsonData="json"/>
+    <MoviesBySomething header="Filmy wg gatunku" something="genres" :jsonData="json"/>
+    <MoviesBySomething header="Filmy wg obsady" something="cast" :jsonData="json" />
   </div>
 </template>
 
@@ -10,8 +10,15 @@
 import MoviesSearch from '@/components/MoviesSearch';
 import MoviesBySomething from "@/components/MoviesBySomething";
 
+import json from "@/assets/movies.json"
+
 export default {
   name: 'App',
+  data() {
+    return {
+      json
+    }
+  },
   components: {
     MoviesSearch,
     MoviesBySomething

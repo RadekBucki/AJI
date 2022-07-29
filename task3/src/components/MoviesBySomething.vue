@@ -15,18 +15,24 @@
 
 <script>
 import {_} from 'vue-underscore';
-import json from "@/assets/movies.json"
 import ListDisplay from "@/components/view/List";
 
 export default {
   name: "MoviesBySomething",
   props: {
     header: String,
-    something: String
+    something: String,
+    jsonData: Array
+  },
+  data() {
+    return {
+      json: _.clone(this.$props.jsonData),
+      counter: 12
+    }
   },
   setup(props) {
     let moviesBySomething = {};
-    _.forEach(json, (record) => {
+    _.forEach(_.clone(props.jsonData), (record) => {
       _.forEach(record[props.something], (item) => {
         if (item in moviesBySomething) {
           moviesBySomething[item].push(record.title);
@@ -41,11 +47,6 @@ export default {
   },
   components: {
     ListDisplay
-  },
-  data() {
-    return {
-      counter: 12
-    }
   },
   methods: {
     showMore() {
