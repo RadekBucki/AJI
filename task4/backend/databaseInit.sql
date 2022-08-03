@@ -1,12 +1,14 @@
 create table category
 (
-    id   int auto_increment primary key,
-    name varchar(256) null
+    id            int auto_increment primary key,
+    category_code varchar(256) not null unique,
+    name          varchar(256) null
 );
 
 create table order_status
 (
     id   int auto_increment primary key,
+    code varchar(256) not null unique,
     name varchar(256) not null
 );
 
@@ -24,6 +26,7 @@ create table order_entity
 create table product
 (
     id          int auto_increment primary key,
+    sku         varchar(256) not null unique,
     name        varchar(256) not null,
     description text         not null,
     unit_price  float        not null,
