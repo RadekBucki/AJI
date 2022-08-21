@@ -11,20 +11,6 @@ const connectionData = {
     database: 'final_application'
 };
 
-/* GET home page. */
-router.get('/', function (req, res) {
-    var connection = mysql.createConnection(connectionData);
-    connection.connect();
-
-    connection.query('SELECT 1 + 1 AS solution', function (error, results) {
-        if (error) throw error;
-        console.log('The solution is: ', results[0].solution);
-    });
-
-    connection.end();
-    res.render('index', {title: 'Express'});
-});
-
 const getProduct = function (req, res) {
     const sku = req.params.sku;
     var connection = mysql.createConnection(connectionData);
@@ -44,25 +30,25 @@ const getProduct = function (req, res) {
         });
     connection.end();
 };
-router.get('/products/:sku', getProduct);
+router.get('/:sku', getProduct);
 
-router.get('/products', function (req, res) {
+router.get('/', function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
     connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name" FROM product ' +
         'JOIN category ON category.id=product.category_id',
         function (error, results) {
-        if (error) {
-            console.log(error);
-            return res.status(500).json({errors: [{message: 'Internal server error'}]});
-        } else {
-            return res.status(200).json({data: results});
-        }
-    });
+            if (error) {
+                console.log(error);
+                return res.status(500).json({errors: [{message: 'Internal server error'}]});
+            } else {
+                return res.status(200).json({data: results});
+            }
+        });
     connection.end();
 });
 
-router.post('/products', function (req, res) {
+router.post('/', function (req, res) {
     const requiredParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
     const params = {...req.body};
 
@@ -89,11 +75,11 @@ router.post('/products', function (req, res) {
             badRequestErrors.push({message: 'Parametr ' + param[0] + ' musi być większy od 0.'});
         }
     });
-    
+
     if (badRequestErrors.length > 0) {
         return res.status(400).json({errors: badRequestErrors});
     }
-    
+
     params.category_id = '(SELECT id FROM category WHERE category.category_code=' + params.category_code + ')';
     delete params.category_code;
 
@@ -102,25 +88,25 @@ router.post('/products', function (req, res) {
     connection.query('INSERT INTO product (sku, name, description, unit_price, unit_weight, category_id) ' +
         'VALUES (' + Object.values(params).join() + ')',
         function (error) {
-        if (error) {
-            console.log(error);
-            const errorResponse = {code: 500, message: 'Internal server error'};
-            if (error.errno === ER_DUP_ENTRY) {
-                errorResponse.code = 409;
-                errorResponse.message = 'Produkt o tym sku już isnieje.';
-            } else if (error.errno === ER_BAD_NULL_ERROR) {
-                errorResponse.code = 400;
-                errorResponse.message = 'Podano nieprawidłową kategorię.';
+            if (error) {
+                console.log(error);
+                const errorResponse = {code: 500, message: 'Internal server error'};
+                if (error.errno === ER_DUP_ENTRY) {
+                    errorResponse.code = 409;
+                    errorResponse.message = 'Produkt o tym sku już isnieje.';
+                } else if (error.errno === ER_BAD_NULL_ERROR) {
+                    errorResponse.code = 400;
+                    errorResponse.message = 'Podano nieprawidłową kategorię.';
+                }
+                return res.status(errorResponse.code).json({errors: [{message: errorResponse.message}]});
+            } else {
+                return res.status(201).json({data: req.body});
             }
-            return res.status(errorResponse.code).json({errors: [{message: errorResponse.message}]});
-        } else {
-            return res.status(201).json({data: req.body});
-        }
-    });
+        });
     connection.end();
 });
 
-router.put('/products/:sku', function (req, res) {
+router.put('/:sku', function (req, res) {
     const allowedParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
     const params = {...req.body};
 
@@ -172,7 +158,7 @@ router.put('/products/:sku', function (req, res) {
                 }
                 return getProduct(req, res);
             }
-    });
+        });
     connection.end();
 });
 
