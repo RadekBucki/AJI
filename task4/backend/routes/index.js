@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
     res.render('index', {title: 'Express'});
 });
 
-router.get('/products/:sku', function (req, res) {
+const getProduct = function (req, res) {
     const sku = req.params.sku;
     var connection = mysql.createConnection(connectionData);
     connection.connect();
@@ -43,7 +43,8 @@ router.get('/products/:sku', function (req, res) {
             }
         });
     connection.end();
-});
+};
+router.get('/products/:sku', getProduct);
 
 router.get('/products', function (req, res) {
     var connection = mysql.createConnection(connectionData);
@@ -70,9 +71,9 @@ router.post('/products', function (req, res) {
         return res.status(400).json({error: {code: 400, message: "Pominięto parametry: ", parameters: missedParams}});
     }
 
-    const redundantParameters = Object.keys(params).filter(param => !requiredParams.includes(param));
-    if (missedParams.length > 0) {
-        return res.status(400).json({error: {code: 400, message: "Nadmiarowe parametry: ", parameters: redundantParameters}});
+    const redundantParams = Object.keys(params).filter(param => !requiredParams.includes(param));
+    if (redundantParams.length > 0) {
+        return res.status(400).json({error: {code: 400, message: "Nadmiarowe parametry: ", parameters: redundantParams}});
     }
 
     Object.entries(params).forEach(function (param) {
@@ -101,6 +102,44 @@ router.post('/products', function (req, res) {
             return res.status(errorResponse.code).json({error: errorResponse});
         } else {
             return res.status(201).json({data: req.body});
+        }
+    });
+    connection.end();
+});
+
+router.put('/products/:sku', function (req, res) {
+    const allowedParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
+    const params = {...req.body};
+
+    const unallowedParams = Object.keys(params).filter(param => !allowedParams.includes(param));
+    if (unallowedParams.length > 0) {
+        return res.status(400).json({error: {code: 400, message: "Niedozwolone parametry: ", parameters: unallowedParams}});
+    }
+
+    Object.entries(params).forEach(function (param) {
+        if (typeof param[1] == 'string') {
+            params[param[0]] = '"' + param[1] + '"';
+        }
+    });
+    if ('category_id' in params) {
+        params.category_id = '(SELECT id FROM category WHERE category.category_code=' + params.category_code + ')';
+        delete params.category_code;
+    }
+    const updatedFields = Object.entries(params).map(param => param[0] + '=' + param[1]).join(' ');
+
+    var connection = mysql.createConnection(connectionData);
+    connection.connect();
+    connection.query('UPDATE product SET ' + updatedFields + ' WHERE sku="' + req.params.sku + '"',
+        function (error, results) {
+        if (error) {
+            console.log(error);
+            const errorResponse = {code: 500, message: 'Internal server error'};
+            return res.status(errorResponse.code).json({error: errorResponse});
+        } else {
+            if ('sku' in params) {
+                req.params.sku = req.body.sku;
+            }
+            return getProduct(req, res);
         }
     });
     connection.end();
