@@ -1,5 +1,6 @@
 var mysql = require('mysql');
 var express = require('express');
+const {ER_BAD_NULL_ERROR, ER_DUP_ENTRY} = require("mysql/lib/protocol/constants/errors");
 
 var router = express.Router();
 
@@ -11,11 +12,11 @@ const connectionData = {
 };
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get('/', function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
 
-    connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+    connection.query('SELECT 1 + 1 AS solution', function (error, results) {
         if (error) throw error;
         console.log('The solution is: ', results[0].solution);
     });
@@ -24,31 +25,32 @@ router.get('/', function (req, res, next) {
     res.render('index', {title: 'Express'});
 });
 
-router.get('/products/:sku', function (req, res, next) {
+router.get('/products/:sku', function (req, res) {
     const sku = req.params.sku;
     var connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT sku,product.name,description,unit_price,unit_weight FROM product ' +
+    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name" FROM product ' +
         'JOIN category ON category.id=product.category_id = category.id ' +
         'WHERE product.sku="' + sku + '"',
-        function (error, results, fields) {
+        function (error, results) {
             if (error) {
                 console.log(error);
                 return res.status(500).json({error: {code: 500, message: "Internal server error"}});
             } else if (results.length) {
                 return res.status(200).json({data: results[0]});
             } else {
-                return res.status(404).json({error: {code: 404, message: "Not Found"}});
+                return res.status(404).json({error: {code: 404, message: "Nie odnalaziono."}});
             }
         });
     connection.end();
 });
 
-router.get('/products', function (req, res, next) {
+router.get('/products', function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT sku,product.name,description,unit_price,unit_weight FROM product ' +
-        'JOIN category ON category.id=product.category_id = category.id', function (error, results, fields) {
+    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name" FROM product ' +
+        'JOIN category ON category.id=product.category_id = category.id',
+        function (error, results) {
         if (error) {
             console.log(error);
             return res.status(500).json({error: {code: 500, message: "Internal server error"}});
@@ -59,20 +61,49 @@ router.get('/products', function (req, res, next) {
     connection.end();
 });
 
-// router.post('/products', function (req, res, next) {
-//     const params = req.body;
-//     var connection = mysql.createConnection(connectionData);
-//     connection.connect();
-//     connection.query('INSERT INTO product (sku, name, description, unit_price, unit_weight, category_id) ' +
-//         'VALUES (' + Object.entries(params).join() +')', function (error, results, fields) {
-//         if (error) {
-//             console.log(error);
-//             return res.status(500).json({error: {code: 500, message: "Internal server error"}});
-//         } else {
-//             return res.status(201)
-//         }
-//     });
-//     connection.end();
-// });
+router.post('/products', function (req, res) {
+    const requiredParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
+    const params = {...req.body};
+
+    const missedParams = requiredParams.filter(param => !params.includes(param));
+    if (missedParams.length > 0) {
+        return res.status(400).json({error: {code: 400, message: "Pominięto parametry: ", parameters: missedParams}});
+    }
+
+    const redundantParameters = Object.keys(params).filter(param => !requiredParams.includes(param));
+    if (missedParams.length > 0) {
+        return res.status(400).json({error: {code: 400, message: "Nadmiarowe parametry: ", parameters: redundantParameters}});
+    }
+
+    Object.entries(params).forEach(function (param) {
+        if (typeof param[1] == 'string') {
+            params[param[0]] = '"' + param[1] + '"';
+        }
+    })
+    params.category_id = '(SELECT id FROM category WHERE category.category_code=' + params.category_code + ')';
+    delete params.category_code;
+
+    var connection = mysql.createConnection(connectionData);
+    connection.connect();
+    connection.query('INSERT INTO product (sku, name, description, unit_price, unit_weight, category_id) ' +
+        'VALUES (' + Object.values(params).join() + ')',
+        function (error) {
+        if (error) {
+            console.log(error);
+            const errorResponse = {code: 500, message: 'Internal server error'};
+            if (error.errno === ER_DUP_ENTRY) {
+                errorResponse.code = 409;
+                errorResponse.message = 'Produkt o tym sku już isnieje.';
+            } else if (error.errno === ER_BAD_NULL_ERROR) {
+                errorResponse.code = 400;
+                errorResponse.message = 'Podano nieprawidłową kategorię.';
+            }
+            return res.status(errorResponse.code).json({error: errorResponse});
+        } else {
+            return res.status(201).json({data: req.body});
+        }
+    });
+    connection.end();
+});
 
 module.exports = router;
