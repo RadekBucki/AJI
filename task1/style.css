@@ -10,23 +10,23 @@ body {
 }
 
 .car {
+    position: relative;
+    top: 1vh;
+    left: -15vh;
     width: 15vh;
     height: 80%;
     background: red;
-    left: -15vh;
     border-radius: 40% 70% 20% 20%;
-    position: relative;
     animation: car-movement 2s linear infinite;
-    animation-delay: unset;
 }
 
 .wheel {
     position: absolute;
     bottom: -10px;
-    background: black;
     width: 20%;
     aspect-ratio: 1/1;
     border-radius: 100%;
+    background: black;
 }
 
 .wheel1 {
@@ -39,37 +39,54 @@ body {
 
 .window {
     position: absolute;
-    background: aqua;
-    border-radius: 40% 90% 20% 20%;
     right: 5%;
     top: 5%;
     width: 40%;
     height: 40%;
+    background: aqua;
+    border-radius: 40% 90% 20% 20%;
 }
 
 .sky {
     width: 100vw;
     height: 40vh;
-    background: darkturquoise;
+    animation: sky-animate 25s linear infinite;
 }
 
 .road {
+    position: relative;
+    top: 2vh;
     width: 100vw;
     height: 15vh;
     background: gray;
 }
 
-.grass {
+.roadLine {
+    position: relative;
+    top: 7vh;
     width: 100vw;
-    height: 45vh;
+    height: 1vh;
+    background: linear-gradient(to right, white 50%, transparent 50%);
+    background-size: 5vh 1vh;
+}
+
+.grass {
+    position: absolute;
+    width: 100vw;
+    height: 60vh;
     background: green;
+    z-index: 2;
 }
 
 .sun {
+    position: relative;
+    left: 20px;
     background: yellow;
     border-radius: 100%;
-    width: 10%;
-    height: auto;
+    width: 10vw;
+    aspect-ratio: 1/1;
+    animation: sun-movement 25s linear infinite;
+    z-index: 1;
 }
 
 @keyframes car-movement {
@@ -78,5 +95,98 @@ body {
     }
     to {
         transform: translateX(120vw);
+    }
+}
+
+@keyframes sun-movement {
+    0% {
+        transform: translateY(44vh);
+    }
+    50% {
+        transform: translateY(2vh);
+    }
+    100% {
+        transform: translateY(46vh);
+    }
+}
+
+@keyframes sky-animate {
+    0% {
+        background: #00000c;
+    }
+    4% {
+        background: #191621;
+    }
+    8% {
+        background: #20202c;
+    }
+    12% {
+        background: #3a3a52;
+    }
+    16% {
+        background: #515175;
+    }
+    20% {
+        background: #8a76ab;
+    }
+    24% {
+        background: #6f71aa;
+    }
+    28% {
+        background: #7072ab;
+    }
+    32% {
+        background: #8583be;
+    }
+    36% {
+        background: #82addb;
+    }
+    40% {
+        background: #a6e6ff;
+    }
+    44% {
+        background: #94dfff;
+    }
+    48% {
+        background: #67d1fb;
+    }
+    52% {
+        background: #38a3d1;
+    }
+    56% {
+        background: #246fa8;
+    }
+    60% {
+        background: #1e528e;
+    }
+    64% {
+        background: #1e528e;
+    }
+    68% {
+        background: #9da671;
+    }
+    72% {
+        background: #e9ce5d;
+    }
+    76% {
+        background: #e1c45e;
+    }
+    80% {
+        background: #C5752D;
+    }
+    84% {
+        background: #8A3B12;
+    }
+    88% {
+        background: #59230B;
+    }
+    92% {
+        background: #4B1D06;
+    }
+    96% {
+        background: #150800;
+    }
+    100% {
+        background: #00000c;
     }
 }
