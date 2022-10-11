@@ -89,10 +89,16 @@ let updateTodoList = function () {
     titleTableRow.appendChild(placeHeader);
     titleTableRow.appendChild(dateHeader);
     table.appendChild(titleTableRow);
+
+    let startDt = document.getElementById("startDate").value;
+    let endDt = document.getElementById("endDate").value;
     for (let todo in todoList) {
-        if ((filterInput.value == "") ||
+        let date = todoList[todo].dueDate.substr(0, todoList[todo].dueDate.indexOf('T'));
+        if (((filterInput.value == "") ||
             (todoList[todo].title.includes(filterInput.value)) ||
-            (todoList[todo].description.includes(filterInput.value))
+            (todoList[todo].description.includes(filterInput.value))) &&
+            (startDt === "" || startDt < date) &&
+            (endDt === "" || endDt > date)
         ) {
             let newTableRow = document.createElement("tr");
             let title = document.createElement("td")
@@ -137,7 +143,7 @@ let addTodo = function () {
     let newTitle = inputTitle.value;
     let newDescription = inputDescription.value;
     let newPlace = inputPlace.value;
-    let newDate = new Date(inputDate.value);
+    let newDate = JSON.stringify(new Date(inputDate.value));
     //create new item
     let newTodo = {
         title: newTitle,
