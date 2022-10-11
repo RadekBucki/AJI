@@ -92,6 +92,7 @@ let updateTodoList = function () {
             jQuery('<td>').appendTo(newTableRow).text(todoList[todo].dueDate);
 
             jQuery('<input>', {
+                class: 'btn btn-danger',
                 type: 'button',
                 value: 'x'
             }).on('click', function () {
