@@ -1,5 +1,7 @@
 "use strict"
 let todoList = []; //declares a new array for Your todo list
+const binUrl = 'https://api.jsonbin.io/v3/b/63453bcb65b57a31e6928517'
+const secretKey = '$2b$10$upY66Zcvj.lnzQvSKsKSk.RoirZMUwWabcgqSzL34M0n4vBOcuxz.'
 
 let initList = function () {
     let savedList = window.localStorage.getItem("todos");
@@ -23,7 +25,38 @@ let initList = function () {
         );
 }
 
-initList();
+$.ajax({
+    // copy Your bin identifier here. It can be obtained in the dashboard
+    url: `${binUrl}/latest`,
+    type: 'GET',
+    headers: { //Required only if you are trying to access a private bin
+        'X-Master-Key': secretKey
+    },
+    success: (data) => {
+        todoList = data.record;
+    },
+    error: (err) => {
+        console.log(err.responseJSON);
+    }
+});
+
+let updateJSONbin = function () {
+    $.ajax({
+        url: binUrl,
+        type: 'PUT',
+        headers: { //Required only if you are trying to access a private bin
+            'X-Master-Key': secretKey
+        },
+        contentType: 'application/json',
+        data: JSON.stringify(todoList),
+        success: (data) => {
+            console.log(data);
+        },
+        error: (err) => {
+            console.log(err.responseJSON);
+        }
+    })
+};
 
 let updateTodoList = function () {
     let todoListDiv =
@@ -81,8 +114,10 @@ let addTodo = function () {
     //add item to the list
     todoList.push(newTodo);
     window.localStorage.setItem("todos", JSON.stringify(todoList));
+    updateJSONbin();
 }
 
 let deleteTodo = function (index) {
     todoList.splice(index, 1);
+    updateJSONbin();
 }
