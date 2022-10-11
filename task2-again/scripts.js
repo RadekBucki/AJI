@@ -69,14 +69,45 @@ let updateTodoList = function () {
 
     //add all elements
     let filterInput = document.getElementById("inputSearch");
+    let table = document.createElement("table");
+    todoListDiv.appendChild(table);
+    let titleTableRow = document.createElement("tr");
+    let titleHeader = document.createElement("th");
+    let titleTitle = document.createTextNode("Title");
+    titleHeader.appendChild(titleTitle);
+    let descriptionHeader = document.createElement("th");
+    let descriptionTitle = document.createTextNode("Description");
+    descriptionHeader.appendChild(descriptionTitle);
+    let placeHeader = document.createElement("th");
+    let placeTitle = document.createTextNode("Place");
+    placeHeader.appendChild(placeTitle);
+    let dateHeader = document.createElement("th");
+    let dateTitle = document.createTextNode("DueDate");
+    dateHeader.appendChild(dateTitle);
+    titleTableRow.appendChild(titleHeader);
+    titleTableRow.appendChild(descriptionHeader);
+    titleTableRow.appendChild(placeHeader);
+    titleTableRow.appendChild(dateHeader);
+    table.appendChild(titleTableRow);
     for (let todo in todoList) {
         if ((filterInput.value == "") ||
             (todoList[todo].title.includes(filterInput.value)) ||
             (todoList[todo].description.includes(filterInput.value))
         ) {
-            let newElement = document.createElement("p");
-            let newContent = document.createTextNode(todoList[todo].title + " " +
-                todoList[todo].description);
+            let newTableRow = document.createElement("tr");
+            let title = document.createElement("td")
+            let titleContent = document.createTextNode(todoList[todo].title);
+            title.appendChild(titleContent);
+            let description = document.createElement("td")
+            let descriptionContent = document.createTextNode(todoList[todo].description);
+            description.appendChild(descriptionContent);
+            let place = document.createElement("td")
+            let placeContent = document.createTextNode(todoList[todo].place);
+            place.appendChild(placeContent);
+            let date = document.createElement("td")
+            let dateContent = document.createTextNode(todoList[todo].dueDate);
+            date.appendChild(dateContent);
+
             let newDeleteButton = document.createElement("input");
             newDeleteButton.type = "button";
             newDeleteButton.value = "x";
@@ -84,9 +115,12 @@ let updateTodoList = function () {
                 function () {
                     deleteTodo(todo);
                 });
-            newElement.appendChild(newContent);
-            newElement.appendChild(newDeleteButton);
-            todoListDiv.appendChild(newElement);
+            newTableRow.appendChild(title);
+            newTableRow.appendChild(description);
+            newTableRow.appendChild(place);
+            newTableRow.appendChild(date);
+            newTableRow.appendChild(newDeleteButton);
+            table.appendChild(newTableRow);
         }
     }
 }
