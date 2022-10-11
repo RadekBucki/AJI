@@ -35,7 +35,15 @@ let updateTodoList = function() {
         let newElement = document.createElement("div");
         let newContent = document.createTextNode(
             todoList[todo].title + " " + todoList[todo].description);
+        let newDeleteButton = document.createElement("input");
+        newDeleteButton.type = "button";
+        newDeleteButton.value = "x";
+        newDeleteButton.addEventListener("click",
+            function() {
+                deleteTodo(todo);
+            });
         newElement.appendChild(newContent);
+        newElement.appendChild(newDeleteButton);
         todoListDiv.appendChild(newElement);
     }
 }
@@ -62,4 +70,8 @@ let addTodo = function() {
     };
     //add item to the list
     todoList.push(newTodo);
+}
+
+let deleteTodo = function(index) {
+    todoList.splice(index,1);
 }
