@@ -49,18 +49,18 @@ let updateTodoList = () => {
                 )
             )
         ) {
-            let newTableRow = jQuery('<tr>').appendTo(todoListDiv);
-            jQuery('<td>').appendTo(newTableRow).text(todoList[todo].title);
-            jQuery('<td>').appendTo(newTableRow).text(todoList[todo].description);
-            jQuery('<td>').appendTo(newTableRow).text(todoList[todo].place);
-            jQuery('<td>').appendTo(newTableRow).text((new Date(dueDate)).toLocaleString());
-            let buttonPlaceInRow = jQuery('<td>').appendTo(newTableRow);
-            let button = jQuery('<button>', {
+            let newTableRow = $('<tr>').appendTo(todoListDiv);
+            $('<td>').appendTo(newTableRow).text(todoList[todo].title);
+            $('<td>').appendTo(newTableRow).text(todoList[todo].description);
+            $('<td>').appendTo(newTableRow).text(todoList[todo].place);
+            $('<td>').appendTo(newTableRow).text((new Date(dueDate)).toLocaleString());
+            let buttonPlaceInRow = $('<td>').appendTo(newTableRow);
+            let button = $('<button>', {
                 class: 'btn btn-danger float-end'
             }).on('click', function () {
                 deleteTodo(todo)
             }).appendTo(buttonPlaceInRow)
-            let icon = jQuery('<i>', {
+            let icon = $('<i>', {
                 class: 'bi bi-trash'
             }).appendTo(button)
         }
