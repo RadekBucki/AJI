@@ -12,6 +12,7 @@ let initList = () => {
         },
         success: (data) => {
             todoList = data.record;
+            updateTodoList();
         },
         error: (err) => {
             console.log(err.responseJSON);
@@ -48,21 +49,20 @@ let updateTodoList = () => {
                 )
             )
         ) {
-            todoListDiv.append(
-                "<tr>" +
-                "<td>" + todoList[todo].title + "</td>" +
-                "<td>" + todoList[todo].description + "</td>" +
-                "<td>" + todoList[todo].place + "</td>" +
-                "<td>" + (
-                    new Date(dueDate)
-                ).toLocaleString() + "</td>" +
-                "<td>" +
-                "<button class='btn btn-danger float-end' onclick='deleteTodo(" + todo + ")'>" +
-                "<i class='bi bi-trash''></i>" +
-                "</button>" +
-                "</td>" +
-                "</tr>"
-            );
+            let newTableRow = jQuery('<tr>').appendTo(todoListDiv);
+            jQuery('<td>').appendTo(newTableRow).text(todoList[todo].title);
+            jQuery('<td>').appendTo(newTableRow).text(todoList[todo].description);
+            jQuery('<td>').appendTo(newTableRow).text(todoList[todo].place);
+            jQuery('<td>').appendTo(newTableRow).text((new Date(dueDate)).toLocaleString());
+            let buttonPlaceInRow = jQuery('<td>').appendTo(newTableRow);
+            let button = jQuery('<button>', {
+                class: 'btn btn-danger float-end'
+            }).on('click', function () {
+                deleteTodo(todo)
+            }).appendTo(buttonPlaceInRow)
+            let icon = jQuery('<i>', {
+                class: 'bi bi-trash'
+            }).appendTo(button)
         }
     }
     let bodyHeight = $("body").height();
@@ -119,6 +119,5 @@ let updateJSONbin = () => {
             console.log(err.responseJSON);
         }
     });
+    updateTodoList();
 }
-
-setInterval(updateTodoList, 1000);
