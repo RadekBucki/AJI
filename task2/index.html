@@ -1,76 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet"
-          type="text/css" href="theme.css">
+    <link href="theme.css"
+          rel="stylesheet" type="text/css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="scripts.js"></script>
     <meta charset="UTF-8">
     <!-- Bootstrap-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+          integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js">
     </script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css" rel="stylesheet">
     <title>MyTODO App</title>
 </head>
 <body>
-    <nav class="navbar navbar-dark bg-primary">
-        <header class="navbar-brand color">TODO List</header>
-    </nav>
-    <div class="container mt-4">
-        <div class="mb-2" id="filters">
-            <h2 class="h2">Filters</h2>
-            <div class="input-group mb-2">
+<nav class="navbar navbar-dark bg-primary">
+    <header class="navbar-brand color">TODO List</header>
+</nav>
+<div class="container mt-4">
+    <div class="mb-2" id="filters">
+        <h2 class="h2">Filters</h2>
+        <div class="input-group mb-2">
                 <span class="input-group-text">
                     <i class="bi bi-search"></i>
                 </span>
-                <input class="form-control" type="text" id="inputSearch" placeholder="Search phrase" />
-            </div>
-            <div class="input-group">
+            <input class="form-control" id="inputSearch" placeholder="Search phrase" type="text">
+        </div>
+        <div class="input-group">
                 <span class="input-group-text">
                     <i class="bi bi-calendar-range"></i>
                 </span>
-                <input type="datetime-local" id="startDate" class="form-control">
-                <input type="datetime-local" id="endDate" class="form-control">
-            </div>
-        </div>
-        <h2 class="h2">TODO List</h2>
-        <div class="table-responsive rounded">
-            <table class="table table-striped">
-                <thead class="bg-primary text-white">
-                    <th>Title</th>
-                    <th>Description</th>
-                    <th>Place</th>
-                    <th>Due date</th>
-                    <th id="action">Action</th>
-                </thead>
-                <tbody id="todoListView"></tbody>
-                <tfoot class="table-success">
-                    <td colspan="5">
-                        <div class="input-group" id="newRecord">
-                            <input class="form-control" type="text" placeholder="Title" name="title" required />
-                            <input class="form-control" type="text" placeholder="Description" name="description"
-                                   required />
-                            <input class="form-control" type="text" placeholder="Place" id="inputPlace" name="place"
-                                   required />
-                            <input class="form-control" type="datetime-local" placeholder="DueDate" id="inputDate"
-                                   name="dueDate" required />
-                            <button type="button" class="btn btn-success" onclick="addTodo()">
-                                <i class="bi bi-plus-lg"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tfoot>
-            </table>
+            <input class="form-control" id="startDate" type="datetime-local">
+            <input class="form-control" id="endDate" type="datetime-local">
         </div>
     </div>
-    <footer class="page-footer bg-primary text-white ">
-        <div class="text-center py-3">
-            Radosław Bucki<br />
-            Applications in Interpreted Languages 2022
-        </div>
-    </footer>
+    <h2 class="h2">TODO List</h2>
+    <div class="table-responsive rounded">
+        <table class="table table-striped">
+            <tr class="bg-primary text-white">
+                <th>Title</th>
+                <th>Description</th>
+                <th>Place</th>
+                <th>Due date</th>
+                <th id="action">Action</th>
+            </tr>
+            <tbody id="todoListView"></tbody>
+            <tfoot class="table-success">
+            <tr>
+                <td colspan="5">
+                    <div class="input-group" id="newRecord">
+                        <input class="form-control" name="title" placeholder="Title" required type="text">
+                        <input class="form-control" name="description" placeholder="Description" required
+                               type="text">
+                        <input class="form-control" id="inputPlace" name="place" placeholder="Place" required
+                               type="text">
+                        <input class="form-control" id="inputDate" name="dueDate" required type="datetime-local">
+                        <button class="btn btn-success" onclick="addTodo()" type="button">
+                            <i class="bi bi-plus-lg"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<footer class="page-footer bg-primary text-white ">
+    <div class="text-center py-3">
+        Radosław Bucki<br>
+        Applications in Interpreted Languages 2022
+    </div>
+</footer>
 </body>
 </html>
