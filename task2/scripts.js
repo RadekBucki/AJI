@@ -28,7 +28,7 @@ let updateTodoList = () => {
     todoListDiv.empty();
 
     //add all elements
-    let filterInput = $("#inputSearch").val();
+    let filterInput = $("#inputSearch").val().toLowerCase();
     let startDate = $("#startDate").val();
     let endDate = $("#endDate").val();
     for (let todo in todoList) {
@@ -36,9 +36,9 @@ let updateTodoList = () => {
         if (
             (
                 filterInput === "" ||
-                todoList[todo].title.includes(filterInput) ||
-                todoList[todo].description.includes(filterInput) ||
-                todoList[todo].place.includes(filterInput)
+                todoList[todo].title.toLowerCase().includes(filterInput) ||
+                todoList[todo].description.toLowerCase().includes(filterInput) ||
+                todoList[todo].place.toLowerCase().includes(filterInput)
             ) &&
             (
                 (
@@ -120,4 +120,9 @@ let updateJSONbin = () => {
         }
     });
     updateTodoList();
+}
+
+for (let element of $("#filters input")) {
+    element.addEventListener("input", updateTodoList);
+    element.addEventListener("change", updateTodoList);
 }
