@@ -61,7 +61,7 @@ export default {
       let fullJson = _.clone(this.$props.jsonData);
       let filters = this.filters;
       this.json = _.filter(fullJson, (record) => {
-        return record.title.includes(filters.title) &&
+        return record.title.toLowerCase().includes(filters.title.toLowerCase() ) &&
             record.cast.join().includes(filters.cast) &&
             (
                 filters.yearFrom === '' || record.year >= filters.yearFrom
