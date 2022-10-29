@@ -3,27 +3,28 @@
   <form>
     <div class="form-group">
       <label for=inputTitle>Tytuł</label>
-      <input type="text" id=inputTitle v-model="filters.title"
+      <input type="text" id=inputTitle v-model="filters.title" v-on:keyup.enter="search" v-on:keyup.esc="clearTitle"
              class="form-control" placeholder="Podaj tytuł lub fragment tytułu filmu" />
     </div>
     <div class="form-group row">
       <label class="col-sm-4 col-form-label" for="inputProductionFrom">Rok produkcji od:</label>
       <div class="col-sm-8">
         <input type="number" min="1900" max="2019" id=inputProductionFrom v-model="filters.yearFrom"
-               class="form-control"
+               v-on:keyup.enter="search" v-on:keyup.esc="clearYearFrom" class="form-control"
                placeholder="Liczba naturalna z przedziału 1900-2019" />
       </div>
     </div>
     <div class="form-group row">
       <label class="col-sm-4 col-form-label" for="inputProductionTo">Rok produkcji do:</label>
       <div class="col-sm-8">
-        <input type="number" min="1900" max="2019" id=inputProductionTo v-model="filters.yearTo" class="form-control"
+        <input type="number" min="1900" max="2019" id=inputProductionTo v-model="filters.yearTo"
+               v-on:keyup.enter="search" v-on:keyup.esc="clearYearTo" class="form-control"
                placeholder="Liczba naturalna z przedziału 1900-2019" />
       </div>
     </div>
     <div class="form-group">
       <label for="inputCast">Obsada</label>
-      <input type="text" id="inputCast" v-model="filters.cast"
+      <input type="text" id="inputCast" v-model="filters.cast" v-on:keyup.enter="search" v-on:keyup.esc="clearCast"
              class="form-control" placeholder="Imię i nazwisko" />
     </div>
     <div class="form-group row">
@@ -58,10 +59,10 @@ export default {
   },
   methods: {
     search() {
-      let fullJson = _.clone(this.$props.jsonData);
+      let fullJson = this.$props.jsonData;
       let filters = this.filters;
       this.json = _.filter(fullJson, (record) => {
-        return record.title.toLowerCase().includes(filters.title.toLowerCase() ) &&
+        return record.title.toLowerCase().includes(filters.title.toLowerCase()) &&
             record.cast.join().includes(filters.cast) &&
             (
                 filters.yearFrom === '' || record.year >= filters.yearFrom
@@ -70,6 +71,22 @@ export default {
                 filters.yearTo === '' || record.year <= filters.yearTo
             );
       });
+    },
+    clearTitle() {
+      this.filters.title = '';
+      this.search();
+    },
+    clearYearFrom() {
+      this.filters.yearFrom = '';
+      this.search();
+    },
+    clearYearTo() {
+      this.filters.yearTo = '';
+      this.search();
+    },
+    clearCast() {
+      this.filters.cast = '';
+      this.search();
     }
   }
 }

@@ -3,8 +3,8 @@
   <ol>
     <li v-for="item in items.slice(0,counter)">{{ item }}</li>
   </ol>
-  <button class="btn btn-outline-info position-absolute bottom-0 w-100" @click="showMore()" v-show="items.length > counter">
-    Pokaż więcej<br />
+  <button class="btn btn-outline-info" @click="showMore()" v-show="items.length > counter">
+    Pokaż więcej<br/>Wyświetlane pierwsze {{counter}} z {{items.length}}<br />
     <i class="bi bi-chevron-down"></i>
   </button>
 </template>

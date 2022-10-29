@@ -1,5 +1,5 @@
 <template>
-  <table class="table-condensed table-hover">
+  <table class="table table-striped table-hover">
     <thead>
       <tr>
         <th>Tytuł</th>
@@ -28,7 +28,7 @@
       <tr>
         <td colspan="4" class="text-center">
           <button class="btn btn-outline-info w-100" @click="showMore" v-show="movies.length > counter">
-            Pokaż więcej<br />
+            Pokaż więcej<br/>Wyświetlane pierwsze {{counter}} z {{movies.length}}<br/>
             <i class="bi bi-chevron-down"></i>
           </button>
         </td>
@@ -51,6 +51,11 @@ export default {
   methods: {
     showMore() {
       this.counter += 10;
+    }
+  },
+  watch: {
+    movies: function () {
+      this.counter = 10;
     }
   }
 };
