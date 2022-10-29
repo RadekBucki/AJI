@@ -3,14 +3,14 @@
   <form>
     <div class="form-group">
       <label for=inputTitle>Tytuł</label>
-      <input type="text" id=inputTitle v-model="filters.title" v-on:keyup.enter="search" v-on:keyup.esc="clearTitle"
+      <input type="text" id=inputTitle v-model="filters.title" v-on:keyup.enter="search" v-on:keyup.esc="clear('title')"
              class="form-control" placeholder="Podaj tytuł lub fragment tytułu filmu" />
     </div>
     <div class="form-group row">
       <label class="col-sm-4 col-form-label" for="inputProductionFrom">Rok produkcji od:</label>
       <div class="col-sm-8">
         <input type="number" min="1900" max="2019" id=inputProductionFrom v-model="filters.yearFrom"
-               v-on:keyup.enter="search" v-on:keyup.esc="clearYearFrom" class="form-control"
+               v-on:keyup.enter="search" v-on:keyup.esc="clear('yearFrom')" class="form-control"
                placeholder="Liczba naturalna z przedziału 1900-2019" />
       </div>
     </div>
@@ -18,13 +18,13 @@
       <label class="col-sm-4 col-form-label" for="inputProductionTo">Rok produkcji do:</label>
       <div class="col-sm-8">
         <input type="number" min="1900" max="2019" id=inputProductionTo v-model="filters.yearTo"
-               v-on:keyup.enter="search" v-on:keyup.esc="clearYearTo" class="form-control"
+               v-on:keyup.enter="search" v-on:keyup.esc="clear('yearTo')" class="form-control"
                placeholder="Liczba naturalna z przedziału 1900-2019" />
       </div>
     </div>
     <div class="form-group">
       <label for="inputCast">Obsada</label>
-      <input type="text" id="inputCast" v-model="filters.cast" v-on:keyup.enter="search" v-on:keyup.esc="clearCast"
+      <input type="text" id="inputCast" v-model="filters.cast" v-on:keyup.enter="search" v-on:keyup.esc="clear(filters.cast)"
              class="form-control" placeholder="Imię i nazwisko" />
     </div>
     <div class="form-group row">
@@ -72,20 +72,14 @@ export default {
             );
       });
     },
-    clearTitle() {
-      this.filters.title = '';
-      this.search();
-    },
-    clearYearFrom() {
-      this.filters.yearFrom = '';
-      this.search();
-    },
-    clearYearTo() {
-      this.filters.yearTo = '';
-      this.search();
-    },
-    clearCast() {
-      this.filters.cast = '';
+    clear(stringToClear) {
+      let clear = {
+        'title': () => this.filters.title = '',
+        'yearFrom': () => this.filters.yearFrom = '',
+        'yearTo': () => this.filters.yearTo = '',
+        'cast': () => this.filters.cast = ''
+      };
+      clear[stringToClear]();
       this.search();
     }
   }
