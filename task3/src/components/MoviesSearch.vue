@@ -73,13 +73,7 @@ export default {
       });
     },
     clear(stringToClear) {
-      let clear = {
-        'title': () => this.filters.title = '',
-        'yearFrom': () => this.filters.yearFrom = '',
-        'yearTo': () => this.filters.yearTo = '',
-        'cast': () => this.filters.cast = ''
-      };
-      clear[stringToClear]();
+      this.filters[stringToClear] = '';
       this.search();
     }
   }
