@@ -1,14 +1,14 @@
 <template>
   <h1>{{ header }}</h1>
   <div class="row">
-    <span v-for="(value, key) in Object.fromEntries(Object.entries(moviesBySomething).slice(0, counter))"
+    <span v-for="[key, value] of Array.from(moviesBySomething).slice(0, counter)"
           class="col-lg-3 col-md-4 col-sm-6 pb-5">
-      <ListDisplay :title="key" :items="value" />
+      <ListDisplay :title="key" :items="value"/>
     </span>
   </div>
   <button class="btn btn-outline-info w-100 mt-2" @click="showMore()"
-          v-show="Object.entries(moviesBySomething).length > counter">
-    Pokaż więcej<br />
+          v-show="moviesBySomething.size > counter">
+    Pokaż więcej<br/>Wyświetlane pierwsze {{counter}} z {{moviesBySomething.size}}<br/>
     <i class="bi bi-chevron-down"></i>
   </button>
 </template>
@@ -26,19 +26,17 @@ export default {
   },
   data() {
     return {
-      json: _.clone(this.$props.jsonData),
       counter: 12
     }
   },
   setup(props) {
-    let moviesBySomething = {};
-    _.forEach(_.clone(props.jsonData), (record) => {
+    let moviesBySomething = new Map();
+    _.forEach(props.jsonData, (record) => {
       _.forEach(record[props.something], (item) => {
-        if (item in moviesBySomething) {
-          moviesBySomething[item].push(record.title);
-        } else {
-          moviesBySomething[item] = [record.title];
+        if (!(moviesBySomething.has(item))) {
+          moviesBySomething.set(item,[]);
         }
+        moviesBySomething.get(item).push(record.title);
       });
     });
     return {
