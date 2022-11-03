@@ -18,7 +18,9 @@
         <td>{{ product.unit_price }} zł</td>
         <td>{{ product.unit_weight }} kg</td>
         <td>
-          <button id="{{product.sku}}" type="submit">Add to cart</button>
+          <button class="btn btn-primary" type="button" @click="addToCart(product)">
+            <CartPlusIcon />
+          </button>
         </td>
       </tr>
     </tbody>
@@ -26,6 +28,7 @@
 </template>
 
 <script lang="ts">
+import CartPlusIcon from 'vue-material-design-icons/CartPlus.vue';
 import {Options, Vue} from 'vue-class-component';
 import type {AxiosInstance, AxiosResponse} from 'axios';
 
@@ -37,9 +40,29 @@ declare module '@vue/runtime-core' {
 
 @Options({
   name: "ProductList",
+  components: {
+    CartPlusIcon
+  },
   data() {
     return {
       products: []
+    }
+  },
+  methods: {
+    addToCart(product: Object) {
+      let cart;
+      if (localStorage.cart) {
+        cart = JSON.parse(localStorage.cart);
+      } else {
+        cart = {
+          items: []
+        };
+      }
+
+      cart.items.push(product);
+      localStorage.cart = JSON.stringify(cart);
+
+      console.log(localStorage.cart);
     }
   },
   async mounted() {
