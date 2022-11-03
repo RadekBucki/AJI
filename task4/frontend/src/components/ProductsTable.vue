@@ -1,5 +1,5 @@
 <template>
-  <table>
+  <table class="table table-stripped table-hover">
     <thead>
       <tr>
         <th>Nazwa produktu</th>
@@ -15,10 +15,10 @@
         <td>{{ product.name }}</td>
         <td>{{ product.category_name }}</td>
         <td>{{ product.description }}</td>
-        <td>{{ product.unit_price }}</td>
-        <td>{{ product.unit_weight }}</td>
+        <td>{{ product.unit_price }} zł</td>
+        <td>{{ product.unit_weight }} kg</td>
         <td>
-          <button type="submit" id="{{product.sku}}">Add to cart</button>
+          <button id="{{product.sku}}" type="submit">Add to cart</button>
         </td>
       </tr>
     </tbody>
@@ -35,7 +35,7 @@ declare module '@vue/runtime-core' {
   }
 }
 
-@Options ({
+@Options({
   name: "ProductList",
   data() {
     return {
@@ -44,10 +44,10 @@ declare module '@vue/runtime-core' {
   },
   async mounted() {
     await this.$axios.get('/products')
-              .then((response: AxiosResponse) => {
-                console.log(response)
-                this.products = response.data.data;
-              });
+        .then((response: AxiosResponse) => {
+          console.log(response)
+          this.products = response.data.data;
+        });
   }
 })
 
