@@ -62,8 +62,6 @@ declare module '@vue/runtime-core' {
 
       cart.items.push(product);
       localStorage.cart = JSON.stringify(cart);
-
-      console.log(localStorage.cart);
     }
   },
   async mounted() {
