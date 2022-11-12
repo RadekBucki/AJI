@@ -6,7 +6,7 @@
         <router-link class="nav-link" to="/">Home</router-link>
       </li>
       <li class="nav-item">
-        <router-link class="nav-link" to="/about">About</router-link>
+        <router-link class="nav-link" to="/cart">Cart <CartIcon /></router-link>
       </li>
     </ul>
   </nav>
@@ -21,3 +21,17 @@
   color: white !important;
 }
 </style>
+
+<script lang="ts">
+import CartIcon from 'vue-material-design-icons/Cart.vue';
+import {Options, Vue} from 'vue-class-component';
+@Options({
+  name: "App",
+  components: {
+    CartIcon
+  },
+})
+
+export default class App extends Vue {
+}
+</script>
