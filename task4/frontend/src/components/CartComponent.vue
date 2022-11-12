@@ -1,5 +1,6 @@
 <template>
-  <table class="table table-stripped table-hover">
+  <h1>Koszyk</h1>
+  <table class="table table-stripped table-hover mt-4">
     <thead class="table-primary">
       <tr>
         <td>Nazwa</td>
@@ -46,11 +47,9 @@ import {Cart} from '@/custom-types/Cart'
     MinusIcon,
     TrashCanIcon
   },
-  data() {
-    return {
-      cart: new Cart() as Cart
-    }
-  },
+  props: {
+    cart: Cart
+  }
 })
 export default class CartComponent extends Vue {
 }
