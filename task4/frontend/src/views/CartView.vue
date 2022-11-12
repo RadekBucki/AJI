@@ -1,15 +1,15 @@
 <template>
-  <Cart/>
+  <CartComponent/>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Cart from '../components/Cart.vue';
+import CartComponent from '../components/CartComponent.vue';
 
 @Options({
   name: "CartView",
   components: {
-    Cart
+    CartComponent
   }
 })
 export default class CartView extends Vue {

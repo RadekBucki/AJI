@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="item in items">
+      <tr v-for="item in cart.items">
         <td>{{ item.name }}</td>
         <td>{{ item.unit_price }}</td>
         <td>
@@ -19,7 +19,7 @@
            |
           <TrashCanIcon/>
         </td>
-        <td>{{ item.unit_price * 1 }}</td>
+        <td>{{ item.unit_price * item.quantity }}</td>
       </tr>
     </tbody>
     <tfoot class="table-success">
@@ -38,9 +38,10 @@ import { Options, Vue } from 'vue-class-component';
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import TrashCanIcon from 'vue-material-design-icons/TrashCan.vue'
+import {Cart} from '@/custom-types/Cart'
 
 @Options({
-  name: "Cart",
+  name: "CartComponent",
   components: {
     PlusIcon,
     MinusIcon,
@@ -48,21 +49,11 @@ import TrashCanIcon from 'vue-material-design-icons/TrashCan.vue'
   },
   data() {
     return {
-      items: []
+      cart: new Cart() as Cart
     }
   },
-  async mounted() {
-    if (!localStorage.cart) {
-      return;
-    }
-    const cart = JSON.parse(localStorage.cart);
-    if (!cart.items) {
-      return;
-    }
-    this.items = cart.items;
-  }
 })
-export default class Cart extends Vue {
+export default class CartComponent extends Vue {
 }
 </script>
 

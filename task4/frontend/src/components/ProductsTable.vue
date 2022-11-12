@@ -32,6 +32,8 @@
 import CartPlusIcon from 'vue-material-design-icons/CartPlus.vue';
 import {Options, Vue} from 'vue-class-component';
 import type {AxiosInstance, AxiosResponse} from 'axios';
+import {Product} from '@/custom-types/Product'
+import {Cart} from "@/custom-types/Cart";
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -46,28 +48,18 @@ declare module '@vue/runtime-core' {
   },
   data() {
     return {
-      products: []
+      products: [] as Product[],
+      cart: new Cart() as Cart
     }
   },
   methods: {
-    addToCart(product: Object) {
-      let cart;
-      if (localStorage.cart) {
-        cart = JSON.parse(localStorage.cart);
-      } else {
-        cart = {
-          items: []
-        };
-      }
-
-      cart.items.push(product);
-      localStorage.cart = JSON.stringify(cart);
+    addToCart(product: Product) {
+      this.cart.addToCart(product)
     }
   },
   async mounted() {
     await this.$axios.get('/products')
         .then((response: AxiosResponse) => {
-          console.log(response)
           this.products = response.data.data;
         });
   }
