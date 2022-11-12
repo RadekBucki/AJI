@@ -11,23 +11,22 @@
     <tbody>
       <tr v-for="item in cart.items">
         <td>{{ item.name }}</td>
-        <td>{{ item.unit_price }}</td>
+        <td>{{ item.unit_price }} zł</td>
         <td>
           <MinusIcon/>
-          1
+          {{ item.quantity }}
           <PlusIcon/>
            |
           <TrashCanIcon/>
         </td>
-        <td>{{ item.unit_price * item.quantity }}</td>
+        <td>{{ item.unit_price * item.quantity }} zł</td>
       </tr>
     </tbody>
     <tfoot class="table-success">
       <tr>
-        <td>SUMA</td>
-        <td>123</td>
-        <td>2</td>
-        <td>246</td>
+        <td colspan="2">SUMA</td>
+        <td>{{ cart.totalQuantity }}</td>
+        <td>{{ cart.totalValue }} zł</td>
       </tr>
     </tfoot>
   </table>

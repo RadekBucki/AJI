@@ -6,13 +6,13 @@
         <router-link class="nav-link" to="/">Home</router-link>
       </li>
       <li class="nav-item">
-        <router-link class="nav-link" to="/cart">Cart <CartIcon /></router-link>
+        <router-link class="nav-link" to="/cart"><CartIcon /> ({{ cart.totalQuantity }})</router-link>
       </li>
     </ul>
   </nav>
 
   <div class="container mt-4">
-    <router-view />
+    <router-view :cart="cart"/>
   </div>
 </template>
 
@@ -25,11 +25,17 @@
 <script lang="ts">
 import CartIcon from 'vue-material-design-icons/Cart.vue';
 import {Options, Vue} from 'vue-class-component';
+import {Cart} from "@/custom-types/Cart";
 @Options({
   name: "App",
   components: {
     CartIcon
   },
+  data() {
+    return {
+      cart: new Cart() as Cart
+    }
+  }
 })
 
 export default class App extends Vue {

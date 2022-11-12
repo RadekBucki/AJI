@@ -46,10 +46,12 @@ declare module '@vue/runtime-core' {
   components: {
     CartPlusIcon
   },
+  props: {
+    cart: Cart
+  },
   data() {
     return {
       products: [] as Product[],
-      cart: new Cart() as Cart
     }
   },
   methods: {
