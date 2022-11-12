@@ -8,7 +8,6 @@
       <li class="nav-item"
           @mouseover="showCart=($route.name !== 'cart')"
           @mouseleave="showCart=false"
-          @click="showCart=false"
       >
         <router-link class="nav-link" to="/cart">
           <CartIcon />

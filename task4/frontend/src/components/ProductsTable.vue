@@ -18,7 +18,7 @@
         <td>{{ product.unit_price }} zł</td>
         <td>{{ product.unit_weight }} kg</td>
         <td>
-          <button class="btn btn-primary" type="button" @click="addToCart(product)">
+          <button class="btn btn-primary" type="button" @click="cart.add(product)">
             <CartPlusIcon />
             <CartIcon />
           </button>
@@ -52,11 +52,6 @@ declare module '@vue/runtime-core' {
   data() {
     return {
       products: [] as Product[],
-    }
-  },
-  methods: {
-    addToCart(product: Product) {
-      this.cart.addToCart(product)
     }
   },
   async mounted() {

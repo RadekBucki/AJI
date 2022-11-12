@@ -14,11 +14,11 @@
         <td>{{ item.name }}</td>
         <td>{{ item.unit_price }} zł</td>
         <td>
-          <MinusIcon/>
+          <MinusIcon @click="cart.decrementItem(item)"/>
           {{ item.quantity }}
-          <PlusIcon/>
+          <PlusIcon @click="cart.add(item)"/>
            |
-          <TrashCanIcon/>
+          <TrashCanIcon @click="cart.removeItem(item)"/>
         </td>
         <td>{{ item.unit_price * item.quantity }} zł</td>
       </tr>

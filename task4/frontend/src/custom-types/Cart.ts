@@ -14,7 +14,34 @@ export class Cart {
         }
     }
 
-    public addToCart(product: Product) {
+    public decrementItem(product: Product) {
+        const itemIndex = this.items.findIndex((item) => product.sku == item.sku);
+        if (itemIndex === -1) {
+            return;
+        }
+        const item: Product = this.items[itemIndex];
+        item.quantity--;
+        if (item.quantity > 0) {
+            this.items[itemIndex] = item;
+        } else {
+            this.items.splice(itemIndex, 1)
+        }
+        this.decrementPropertiesAndLocalStorage(item.unit_price);
+    }
+
+    public removeItem(product: Product) {
+        const itemIndex = this.items.findIndex((item) => product.sku == item.sku);
+        if (itemIndex === -1) {
+            return;
+        }
+        const item: Product = this.items[itemIndex];
+        this.items.splice(itemIndex, 1);
+        this._totalQuantity -= item.quantity;
+        this._totalValue -= item.quantity * item.unit_price;
+        localStorage.cart = JSON.stringify(this);
+    }
+
+    public add(product: Product) {
         if (!this.items) {
             this.addProductToCart(product)
             return;
@@ -30,19 +57,25 @@ export class Cart {
     private addProductToCart(product: Product) {
         product.quantity = 1;
         this.items.push(product);
-        this.updatePropertiesAndLocalStorage(product.unit_price);
+        this.incrementPropertiesAndLocalStorage(product.unit_price);
     }
 
     private incrementProductQuantity(index: number) {
         const item: Product = this.items[index];
         item.quantity++;
         this.items[index] = item;
-        this.updatePropertiesAndLocalStorage(item.unit_price);
+        this.incrementPropertiesAndLocalStorage(item.unit_price);
     }
 
-    private updatePropertiesAndLocalStorage(price: number) {
+    private incrementPropertiesAndLocalStorage(price: number) {
         this._totalQuantity++;
         this._totalValue += price;
+        localStorage.cart = JSON.stringify(this);
+    }
+
+    private decrementPropertiesAndLocalStorage(price: number) {
+        this._totalQuantity--;
+        this._totalValue -= price;
         localStorage.cart = JSON.stringify(this);
     }
 
