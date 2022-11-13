@@ -147,7 +147,8 @@ import {AxiosResponse} from "axios";
         }
       }).then((response: AxiosResponse) => {
           if (response.status == 201) {
-            // TODO: Go to thank you page
+            this.$router.push({path: '/thank-you-page'});
+            this.cart.clear();
           } else {
             this.placeOrderSucceed = false;
             this.placeOrderSucceed = response.data.err

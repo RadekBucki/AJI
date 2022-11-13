@@ -1,52 +1,52 @@
 import {Product} from "@/custom-types/Product";
 
 export class Cart {
-    private readonly items: Product[] = [];
+    private _items: Product[] = [];
     private _totalQuantity: number = 0;
     private _totalValue: number = 0;
 
     constructor() {
         if (localStorage.cart) {
             const cart = JSON.parse(localStorage.cart);
-            this.items = cart.items;
+            this._items = cart._items;
             this._totalQuantity = cart._totalQuantity;
             this._totalValue = cart._totalValue;
         }
     }
 
     public decrementItem(product: Product) {
-        const itemIndex = this.items.findIndex((item) => product.sku == item.sku);
+        const itemIndex = this._items.findIndex((item) => product.sku == item.sku);
         if (itemIndex === -1) {
             return;
         }
-        const item: Product = this.items[itemIndex];
+        const item: Product = this._items[itemIndex];
         item.quantity--;
         if (item.quantity > 0) {
-            this.items[itemIndex] = item;
+            this._items[itemIndex] = item;
         } else {
-            this.items.splice(itemIndex, 1)
+            this._items.splice(itemIndex, 1)
         }
         this.decrementPropertiesAndLocalStorage(item.unit_price);
     }
 
     public removeItem(product: Product) {
-        const itemIndex = this.items.findIndex((item) => product.sku == item.sku);
+        const itemIndex = this._items.findIndex((item) => product.sku == item.sku);
         if (itemIndex === -1) {
             return;
         }
-        const item: Product = this.items[itemIndex];
-        this.items.splice(itemIndex, 1);
+        const item: Product = this._items[itemIndex];
+        this._items.splice(itemIndex, 1);
         this._totalQuantity -= item.quantity;
         this._totalValue -= item.quantity * item.unit_price;
         localStorage.cart = JSON.stringify(this);
     }
 
     public add(product: Product) {
-        if (!this.items) {
+        if (!this._items) {
             this.addProductToCart(product)
             return;
         }
-        const itemIndex = this.items.findIndex((item) => product.sku == item.sku);
+        const itemIndex = this._items.findIndex((item) => product.sku == item.sku);
         if (itemIndex === -1) {
             this.addProductToCart(product);
             return;
@@ -54,16 +54,23 @@ export class Cart {
         this.incrementProductQuantity(itemIndex);
     }
 
+    public clear() {
+        localStorage.removeItem('cart');
+        this._items = [];
+        this._totalQuantity = 0;
+        this._totalValue = 0;
+    }
+
     private addProductToCart(product: Product) {
         product.quantity = 1;
-        this.items.push(product);
+        this._items.push(product);
         this.incrementPropertiesAndLocalStorage(product.unit_price);
     }
 
     private incrementProductQuantity(index: number) {
-        const item: Product = this.items[index];
+        const item: Product = this._items[index];
         item.quantity++;
-        this.items[index] = item;
+        this._items[index] = item;
         this.incrementPropertiesAndLocalStorage(item.unit_price);
     }
 
@@ -85,5 +92,9 @@ export class Cart {
 
     get totalValue(): number {
         return this._totalValue;
+    }
+
+    get items(): Product[] {
+        return this._items;
     }
 }

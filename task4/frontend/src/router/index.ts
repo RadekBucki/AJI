@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import HomeView from '@/views/HomeView.vue';
 import CartView from "@/views/CartView.vue";
+import ThankYouPage from '@/views/ThankYouPage.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,6 +14,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/cart',
     name: 'cart',
     component: CartView,
+    props: true
+  },
+  {
+    path: '/thank-you-page',
+    name: 'thank-you-page',
+    component: ThankYouPage,
     props: true
   }
 ]
