@@ -32,9 +32,12 @@
     </tfoot>
   </table>
 
-  <form class="needs-validation" @submit.prevent="validate" id="form" novalidate
+  <form class="needs-validation"
+        @submit.prevent="validate"
+        @submit="placeOrder()"
+        id="form" novalidate
         v-bind:class="{ 'was-validated': wasValidated }"
-        v-show="$route.name === 'cart'"
+        v-show="$route.name === 'cart' && cart.items.length"
   >
     <h1>Dane zamawiającego</h1>
     <div class="input-group has-validation mt-1">
@@ -58,8 +61,11 @@
         <p class="mb-0" v-for="error in errors.phone">{{ error }}</p>
       </div>
     </div>
-    <button class="btn btn-primary mt-2" type="submit">Złóż zamówienie</button>
+    <button class="btn btn-primary mt-2" type="submit" :disabled="!cart.items.length">Złóż zamówienie</button>
   </form>
+  <div class="alert alert-danger" v-show="!placeOrderSucceed">
+    {{ placeOrderSucceedError }}
+  </div>
 </template>
 
 <script lang="ts">
@@ -68,6 +74,7 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import TrashCanIcon from 'vue-material-design-icons/TrashCan.vue'
 import {Cart} from '@/custom-types/Cart'
+import {AxiosResponse} from "axios";
 
 @Options({
   name: "CartComponent",
@@ -92,7 +99,9 @@ import {Cart} from '@/custom-types/Cart'
         name: [],
         email: [],
         phone: []
-      }
+      },
+      placeOrderSucceed: true,
+      placeOrderSucceedError: ''
     }
   },
   methods: {
@@ -127,6 +136,23 @@ import {Cart} from '@/custom-types/Cart'
         this.errors.phone.push('Numer telefonu musi być wypełniony.');
       }
       this.wasValidated = true;
+    },
+    async placeOrder() {
+      await this.$axios.post('/orders', {
+        products: this.cart.items,
+        buyer: {
+          username: this.name,
+          email: this.email,
+          phone: this.phone
+        }
+      }).then((response: AxiosResponse) => {
+          if (response.status == 201) {
+            // TODO: Go to thank you page
+          } else {
+            this.placeOrderSucceed = false;
+            this.placeOrderSucceed = response.data.err
+          }
+      });
     }
   }
 })
