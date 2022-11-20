@@ -14,11 +14,11 @@
         <td>{{ item.name }}</td>
         <td>{{ item.unit_price }} zł</td>
         <td>
-          <MinusIcon @click="cart.decrementItem(item)"/>
+          <MinusIcon class="cursor-pointer" @click="cart.decrementItem(item)"/>
           {{ item.quantity }}
-          <PlusIcon @click="cart.add(item)"/>
+          <PlusIcon class="cursor-pointer" @click="cart.add(item)"/>
            |
-          <TrashCanIcon @click="cart.removeItem(item)"/>
+          <TrashCanIcon class="cursor-pointer" @click="cart.removeItem(item)"/>
         </td>
         <td>{{ item.unit_price * item.quantity }} zł</td>
       </tr>
@@ -162,4 +162,7 @@ export default class CartComponent extends Vue {
 </script>
 
 <style scoped>
+.cursor-pointer {
+  cursor: pointer;
+}
 </style>
