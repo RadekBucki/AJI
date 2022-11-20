@@ -1,5 +1,8 @@
 <template>
-  <h1>Produkty</h1>
+  <div class="d-flex justify-content-sm-between">
+    <h1>Produkty</h1>
+    <router-link to="/admin/dashboard/products/new" class="btn btn-lg btn-success">Utwórz nowy</router-link>
+  </div>
   <table class="table table-stripped table-hover">
     <thead>
       <tr>
