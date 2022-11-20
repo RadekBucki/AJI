@@ -1,4 +1,7 @@
 <template>
+  <div class="alert alert-danger mt-2" v-show="isError">
+    <span v-for="error in errors">{{ error.message }}<br></span>
+  </div>
   <h1>Zamówienia</h1>
   <h2>Filtry</h2>
   <select class="form-select" aria-label="Stan zamówienia" v-model="selectedStatus" @change="filterByStatus()">
@@ -30,17 +33,13 @@
           <span v-for="product in order.products">{{ product.name }} - {{ product.quantity }}<br></span>
         </td>
         <td>
-          <button class="btn btn-danger" type="button" @click="edit(product)">
-            Edit
-          </button>
+          <select class="form-select" aria-label="Stan zamówienia" v-model="order.status_code" @change="edit(order)">
+            <option v-for="status in ordersStatuses" :value="status.code">{{ status.name }}</option>
+          </select>
         </td>
       </tr>
     </tbody>
   </table>
-
-  <div class="alert alert-danger mt-2" v-show="isError">
-    <span v-for="error in errors">{{ error.message }}<br></span>
-  </div>
 
 </template>
 
@@ -63,8 +62,17 @@ import {OrderStatus} from "@/custom-types/OrderStatus";
     }
   },
   methods: {
-    edit(order: Order) {
-      alert('edit')
+    async edit(order: Order) {
+      await this.$axios.put('/orders/' + order.id + '/' + order.status_code, order, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}` ?? '',
+        }
+      }).then((response: AxiosResponse) => {
+        order = response.data.data;
+      }).catch((reason: AxiosError) => {
+        this.isError = true;
+        this.errors = (reason.response?.data as ErrorResponse).errors;
+      });
     },
     async getAllOrders() {
       await this.$axios.get('/orders', {

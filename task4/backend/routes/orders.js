@@ -141,8 +141,10 @@ router.put('/:orderId/:statusCode', UserToken.authenticateToken, function (req, 
                 return res.status(errorResponse.code).json({errors: [errorResponse]});
             } else if (results.changedRows === 0) {
                 return res.status(404).json({errors: [{message: 'Nie odnaleziono.'}]});
+            } else if (error.sqlMessage === 'Impossible transition between statuses.') {
+                return res.status(400).json({errors: [{message: 'Nie dozwolone przejście między statusami.'}]});
             } else {
-                return res.status(200).json({data: []});
+                return res.status(200).json({data: req.body});
             }
         });
     connection.end();
