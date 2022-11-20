@@ -34,7 +34,7 @@
 
   <form class="needs-validation"
         @submit.prevent="validate"
-        @submit="placeOrder()"
+        @submit="placeOrder"
         id="form" novalidate
         v-bind:class="{ 'was-validated': wasValidated }"
         v-show="$route.name === 'cart' && cart.items.length"

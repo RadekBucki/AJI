@@ -17,7 +17,7 @@ const getProduct = function (req, res) {
     const sku = req.params.sku;
     var connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name" FROM product ' +
+    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name",category.category_code as category_code FROM product ' +
         'JOIN category ON category.id=product.category_id = category.id ' +
         'WHERE product.sku="' + sku + '"',
         function (error, results) {
@@ -37,7 +37,7 @@ router.get('/:sku', getProduct);
 router.get('/', function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name" FROM product ' +
+    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.category_code as category_code, category.name as "category_name" FROM product ' +
         'JOIN category ON category.id=product.category_id',
         function (error, results) {
             if (error) {
@@ -138,11 +138,11 @@ router.put('/:sku', UserToken.authenticateToken, function (req, res) {
     if (badRequestErrors.length > 0) {
         return res.status(400).json({errors: badRequestErrors});
     }
-    if ('category_id' in params) {
+    if ('category_code' in params) {
         params.category_id = '(SELECT id FROM category WHERE category.category_code=' + params.category_code + ')';
         delete params.category_code;
     }
-    const updatedFields = Object.entries(params).map(param => param[0] + '=' + param[1]).join(' ');
+    const updatedFields = Object.entries(params).map(param => param[0] + '=' + param[1]).join(', ');
 
     var connection = mysql.createConnection(connectionData);
     connection.connect();
@@ -152,7 +152,7 @@ router.put('/:sku', UserToken.authenticateToken, function (req, res) {
                 console.log(error);
                 const errorResponse = {message: 'Internal server error'};
                 return res.status(errorResponse.code).json({errors: [errorResponse]});
-            } else if (results.changedRows === 0) {
+            } else if (results.changedRows === 0 && results.affectedRows === 0) {
                 return res.status(404).json({errors: [{message: 'Nie odnaleziono.'}]});
             } else {
                 if ('sku' in params) {
