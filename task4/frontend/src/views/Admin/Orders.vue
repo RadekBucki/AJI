@@ -1,14 +1,14 @@
 <template>
-  <h1>Login</h1>
+  <h1>Zamówienia</h1>
 </template>
 
 <script lang="ts">
 import {Options, Vue} from "vue-class-component";
 
 @Options({
-  name: "Template"
+  name: "Orders"
 })
-export default class Template extends Vue {
+export default class Orders extends Vue {
 }
 </script>
 

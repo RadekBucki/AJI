@@ -1,5 +1,7 @@
 <template>
-  <CartComponent :cart="cart"/>
+  <div class="container mt-4">
+    <CartComponent :cart="cart"/>
+  </div>
 </template>
 
 <script lang="ts">

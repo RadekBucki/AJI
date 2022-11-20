@@ -1,14 +1,14 @@
 <template>
-  <h1>Login</h1>
+  <h1>Produkty</h1>
 </template>
 
 <script lang="ts">
 import {Options, Vue} from "vue-class-component";
 
 @Options({
-  name: "TableView"
+  name: "Products"
 })
-export default class TableView extends Vue {
+export default class Products extends Vue {
 }
 </script>
 

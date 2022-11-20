@@ -1,5 +1,5 @@
 <template>
-    <div class="position-absolute top-50 start-50 translate-middle">
+    <div class="position-absolute top-50 start-50 translate-middle" @keyup.enter="signIn">
       <div class="shadow-lg p-4 rounded-5">
         <h1 class="lead">Logowanie do panelu administracyjnego</h1>
         <form v-on:submit.prevent="signIn">
@@ -54,7 +54,7 @@ import {AxiosError, AxiosResponse} from "axios";
       }).then((response: AxiosResponse) => {
         console.log(response)
         if (response.status == 200) {
-          localStorage.setItem('token', response.data.data.token)
+          localStorage.setItem('token', response.data.data.token);
           this.$router.push({path: '/admin/dashboard'});
         } else {
           this.signInData.isError = true;
@@ -63,6 +63,11 @@ import {AxiosError, AxiosResponse} from "axios";
           console.log(error);
           this.signInData.isError = true
       });
+    }
+  },
+  mounted() {
+    if (localStorage.getItem('token')) {
+      this.$router.push({path: '/admin/dashboard'});
     }
   }
 })

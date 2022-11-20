@@ -20,9 +20,7 @@
     </ul>
   </nav>
 
-  <div class="container mt-4">
-    <router-view :cart="cart" />
-  </div>
+  <router-view :cart="cart" />
 </template>
 
 <style>

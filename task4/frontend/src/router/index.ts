@@ -4,6 +4,8 @@ import CartView from "@/views/CartView.vue";
 import ThankYouPage from '@/views/ThankYouPage.vue';
 import Login from "@/views/Admin/Login.vue";
 import Dashboard from "@/views/Admin/Dashboard.vue";
+import Products from "@/views/Admin/Products.vue";
+import Orders from "@/views/Admin/Orders.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,7 +35,18 @@ const routes: Array<RouteRecordRaw> = [
     path: '/admin/dashboard',
     name: 'dashboard',
     component: Dashboard,
-    props: true
+    children: [
+      {
+        path: 'products',
+        name: 'products',
+        component: Products
+      },
+      {
+        path: 'orders',
+        name: 'orders',
+        component: Orders
+      }
+    ]
   },
 ]
 
