@@ -15,7 +15,7 @@ create table order_status
 create table order_entity
 (
     id              int auto_increment primary key,
-    creation_date   datetime     null,
+    creation_date   datetime     null default NOW(),
     user_name       varchar(256) not null,
     email           varchar(256) not null,
     phone           varchar(256) null,

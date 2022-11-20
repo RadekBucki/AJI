@@ -1,14 +1,15 @@
 var mysql = require('mysql');
 var express = require('express');
 const {ER_BAD_NULL_ERROR, ER_DUP_ENTRY} = require('mysql/lib/protocol/constants/errors');
+require('dotenv').config();
 
 var router = express.Router();
 
 const connectionData = {
-    host: 'localhost',
-    user: 'root',
-    password: 'PvyrA6dW',
-    database: 'final_application'
+    host: process.env.HOST,
+    user: process.env.USER,
+    password: process.env.PASSWORD,
+    database: process.env.DATABASE
 };
 router.get('/', function (req, res) {
     var connection = mysql.createConnection(connectionData);
