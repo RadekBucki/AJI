@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-2">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-2" v-show="!$route.path.includes('admin')">
     <a class="navbar-brand" href="#">Vue&Express Shop</a>
     <ul class="navbar-nav">
       <li class="nav-item">

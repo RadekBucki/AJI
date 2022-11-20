@@ -20,7 +20,6 @@
         <td>
           <button class="btn btn-primary" type="button" @click="cart.add(product)">
             <CartPlusIcon />
-            <CartIcon />
           </button>
         </td>
       </tr>
