@@ -52,7 +52,6 @@ import {AxiosError, AxiosResponse} from "axios";
         user: this.signInData.username,
         password: this.signInData.password
       }).then((response: AxiosResponse) => {
-        console.log(response)
         if (response.status == 200) {
           localStorage.setItem('token', response.data.data.token);
           this.$router.push({path: '/admin/dashboard'});
@@ -60,7 +59,6 @@ import {AxiosError, AxiosResponse} from "axios";
           this.signInData.isError = true;
         }
       }).catch((error: AxiosError) => {
-          console.log(error);
           this.signInData.isError = true
       });
     }

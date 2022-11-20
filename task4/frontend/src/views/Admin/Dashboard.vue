@@ -2,14 +2,11 @@
   <div class="container-fluid">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
-        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100 h-100">
           <a href="/admin/dashboard" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
             <span class="fs-5 d-none d-sm-inline">Vue&Express Shop Admin Panel</span>
           </a>
           <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-            <li class="nav-item">
-              <router-link class="nav-link align-middle px-0 text-light" to="/admin/dashboard">Start</router-link>
-            </li>
             <li class="nav-item">
               <router-link class="nav-link align-middle px-0 text-light" to="/admin/dashboard/products">Produkty</router-link>
             </li>
@@ -18,7 +15,7 @@
             </li>
           </ul>
           <hr>
-          <div class="dropdown pb-4">
+          <div class="dropdown pb-4 bottom-0">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
               <img src="/favicon.ico" alt="Ikona użytkownika" width="30" height="30" class="rounded-circle">
@@ -59,5 +56,7 @@ export default class Dashboard extends Vue {
 </script>
 
 <style scoped>
-
+.router-link-active {
+  text-decoration: underline;
+}
 </style>

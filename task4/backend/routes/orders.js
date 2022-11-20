@@ -16,13 +16,14 @@ const connectionData = {
 router.get('/', UserToken.authenticateToken, function (req, res) {
     const connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT oi2.*, (\n' +
+    connection.query('SELECT oi2.*, order_status.code as status_code, order_status.name as status_name, (\n' +
         '    SELECT JSON_ARRAYAGG(JSON_OBJECT(\'sku\', p.sku, \'name\', p.name, \'price\', p.unit_price, \'quantity\', oi.quantity))\n' +
         '    FROM order_items oi\n' +
         '             JOIN product p on p.id = oi.product_id\n' +
         '    WHERE order_id=oi2.id\n' +
         ') AS products\n' +
-        'FROM order_entity oi2',
+        'FROM order_entity oi2 ' +
+        'JOIN order_status ON oi2.order_status_id=order_status.id',
         function (error, results) {
             if (error) {
                 console.log(error);
@@ -150,13 +151,14 @@ router.put('/:orderId/:statusCode', UserToken.authenticateToken, function (req, 
 router.get('/status/:statusCode', UserToken.authenticateToken, function (req, res) {
     const connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT oi2.*, (\n' +
+    connection.query('SELECT oi2.*, order_status.code as status_code, order_status.name as status_name, (\n' +
         '    SELECT JSON_ARRAYAGG(JSON_OBJECT(\'sku\', p.sku, \'name\', p.name, \'price\', p.unit_price, \'quantity\', oi.quantity))\n' +
         '    FROM order_items oi\n' +
         '             JOIN product p on p.id = oi.product_id\n' +
         '    WHERE order_id=oi2.id\n' +
         ') AS products\n' +
         'FROM order_entity oi2 ' +
+        'JOIN order_status ON oi2.order_status_id=order_status.id ' +
         'WHERE oi2.order_status_id=(SELECT id FROM order_status WHERE code="' + req.params.statusCode + '")',
         function (error, results) {
             if (error) {
