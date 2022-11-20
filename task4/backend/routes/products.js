@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var express = require('express');
 const {ER_BAD_NULL_ERROR, ER_DUP_ENTRY} = require('mysql/lib/protocol/constants/errors');
 require('dotenv').config();
+const UserToken = require('../classes/UserToken');
 
 var router = express.Router();
 
@@ -49,7 +50,7 @@ router.get('/', function (req, res) {
     connection.end();
 });
 
-router.post('/', function (req, res) {
+router.post('/', UserToken.authenticateToken, function (req, res) {
     const requiredParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
     const params = {...req.body};
 
@@ -107,7 +108,7 @@ router.post('/', function (req, res) {
     connection.end();
 });
 
-router.put('/:sku', function (req, res) {
+router.put('/:sku', UserToken.authenticateToken, function (req, res) {
     const allowedParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
     const params = {...req.body};
 
