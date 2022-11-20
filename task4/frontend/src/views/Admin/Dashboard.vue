@@ -29,11 +29,8 @@
           </div>
         </div>
       </div>
-      <div class="col py-3" v-show="$route.path !== '/admin/dashboard'">
+      <div class="col py-3">
         <router-view/>
-      </div>
-      <div class="col py-3" v-show="$route.path === '/admin/dashboard'">
-        <h1>Strona główna</h1>
       </div>
     </div>
   </div>
