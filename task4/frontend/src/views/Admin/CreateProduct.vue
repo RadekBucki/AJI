@@ -1,5 +1,5 @@
 <template>
-  <ProductForm :sku="sku" type="edit"/>
+  <ProductForm type="new"/>
 </template>
 
 <script lang="ts">
@@ -7,15 +7,12 @@ import {Options, Vue} from "vue-class-component";
 import ProductForm from '@/components/ProductForm.vue'
 
 @Options({
-  name: "EditProduct",
-  props: {
-    sku: '' as string
-  },
+  name: "CreateProduct",
   components: {
     ProductForm
   }
 })
-export default class EditProduct extends Vue {
+export default class CreateProduct extends Vue {
 }
 </script>
 

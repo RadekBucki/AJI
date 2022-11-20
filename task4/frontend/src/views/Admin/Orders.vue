@@ -39,7 +39,7 @@
   </table>
 
   <div class="alert alert-danger mt-2" v-show="isError">
-    <span v-for="error in errors">{{ error.message }}</span>
+    <span v-for="error in errors">{{ error.message }}<br></span>
   </div>
 
 </template>

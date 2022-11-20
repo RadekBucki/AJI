@@ -18,7 +18,7 @@ const getProduct = function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
     connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name",category.category_code as category_code FROM product ' +
-        'JOIN category ON category.id=product.category_id = category.id ' +
+        'JOIN category ON category.id=product.category_id ' +
         'WHERE product.sku="' + sku + '"',
         function (error, results) {
             if (error) {
@@ -88,7 +88,8 @@ router.post('/', UserToken.authenticateToken, function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
     connection.query('INSERT INTO product (sku, name, description, unit_price, unit_weight, category_id) ' +
-        'VALUES (' + Object.values(params).join() + ')',
+        'VALUES (' + params.sku + ',' + params.name + ',' + params.description + ',' + params.unit_price +
+        ',' + params.unit_weight + ',' + params.category_id + ')',
         function (error) {
             if (error) {
                 console.log(error);

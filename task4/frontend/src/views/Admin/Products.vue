@@ -40,7 +40,7 @@ import {Product} from "@/custom-types/Product";
   },
   methods: {
     edit(product: Product) {
-      this.$router.push({path: '/admin/dashboard/products/' + product.sku});
+      this.$router.push({path: '/admin/dashboard/products/edit/' + product.sku});
     }
   },
   async mounted() {

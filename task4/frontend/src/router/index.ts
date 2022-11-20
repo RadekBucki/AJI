@@ -7,6 +7,7 @@ import Dashboard from "@/views/Admin/Dashboard.vue";
 import Products from "@/views/Admin/Products.vue";
 import Orders from "@/views/Admin/Orders.vue";
 import EditProduct from "@/views/Admin/EditProduct.vue";
+import CreateProduct from "@/views/Admin/CreateProduct.vue";
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -43,8 +44,13 @@ const routes: Array<RouteRecordRaw> = [
         component: Products
       },
       {
-        path: 'products/:sku',
-        name: 'edit-products',
+        path: 'products/new',
+        name: 'add-product',
+        component: CreateProduct
+      },
+      {
+        path: 'products/edit/:sku',
+        name: 'edit-product',
         component: EditProduct,
         props: true
       },
