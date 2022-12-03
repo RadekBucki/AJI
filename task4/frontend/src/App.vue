@@ -7,6 +7,7 @@
       </li>
       <li class="nav-item"
           @mouseover="showCart=($route.name !== 'cart')"
+          @mousedown="showCart=false"
           @mouseleave="showCart=false"
       >
         <router-link class="nav-link" to="/cart">
