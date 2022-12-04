@@ -14,6 +14,21 @@ export class Cart {
         }
     }
 
+    public cartChangeMultiple(newNumber: number, product: Product) {
+        const quantity = product.quantity;
+        if (newNumber > quantity) {
+            this.addMultiple(newNumber - quantity, product)
+        } else if (newNumber < quantity) {
+            this.decrementMultiple(quantity - newNumber, product)
+        }
+    }
+
+    public decrementMultiple(numToAdd: number, product: Product) {
+        for (let i = 0; i < numToAdd; i++) {
+            this.decrementItem(product)
+        }
+    }
+
     public decrementItem(product: Product) {
         const itemIndex = this._items.findIndex((item) => product.sku == item.sku);
         if (itemIndex === -1) {
@@ -39,6 +54,12 @@ export class Cart {
         this._totalQuantity -= item.quantity;
         this._totalValue -= item.quantity * item.unit_price;
         localStorage.cart = JSON.stringify(this);
+    }
+
+    public addMultiple(numToAdd: number, product: Product) {
+        for (let i = 0; i < numToAdd; i++) {
+            this.add(product)
+        }
     }
 
     public add(product: Product) {
@@ -84,6 +105,24 @@ export class Cart {
         this._totalQuantity--;
         this._totalValue -= price;
         localStorage.cart = JSON.stringify(this);
+    }
+
+    public calculateTotalQuantityAndValue() {
+        this._totalQuantity = 0;
+        this._totalValue = 0;
+        this.items.forEach(item => {
+            this._totalQuantity += Number(item.quantity);
+            this._totalValue += Number(item.unit_price) * Number(item.quantity);
+            // @ts-ignore
+            if (item.quantity !== '' && Number(item.quantity) === 0) {
+                this.removeItem(item);
+            }
+            if (Number(item.quantity) === Number.NaN || Number(item.quantity) < 0) {
+                this._totalQuantity = 0;
+                this._totalValue = 0;
+                return;
+            }
+        })
     }
 
     get totalQuantity(): number {

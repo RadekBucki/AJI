@@ -15,7 +15,9 @@
         <td>{{ item.unit_price }} zł</td>
         <td>
           <MinusIcon class="cursor-pointer" @click="cart.decrementItem(item)"/>
-          {{ item.quantity }}
+          <input class="input-small no-border" type="number" v-model="item.quantity" placeholder=0
+                 :style="{width: item.quantity.toString().length + 2 + 'ch'}"
+                 @input="cart.calculateTotalQuantityAndValue" hide-spin-buttons>
           <PlusIcon class="cursor-pointer" @click="cart.add(item)"/>
            |
           <TrashCanIcon class="cursor-pointer" @click="cart.removeItem(item)"/>
@@ -164,5 +166,23 @@ export default class CartComponent extends Vue {
 <style scoped>
 .cursor-pointer {
   cursor: pointer;
+}
+
+.no-border{
+  border: none;
+  background: transparent;
+  text-align:center;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 </style>
