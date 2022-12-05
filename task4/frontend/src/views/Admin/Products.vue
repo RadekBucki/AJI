@@ -1,38 +1,14 @@
 <template>
-  <div class="d-flex justify-content-sm-between">
-    <h1>Produkty</h1>
-    <router-link to="/admin/dashboard/products/new" class="btn btn-lg btn-success">Utwórz nowy</router-link>
+  <div class="container mt-4">
+    <ProductTable :cart="cart" />
   </div>
-  <table class="table table-stripped table-hover">
-    <thead>
-      <tr>
-        <th>Nazwa produktu</th>
-        <th>Kategoria</th>
-        <th>Cena jednostkowa</th>
-        <th>Waga jednostkowa</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="product in products">
-        <td>{{ product.name }}</td>
-        <td>{{ product.category_name }}</td>
-        <td>{{ product.unit_price }} zł</td>
-        <td>{{ product.unit_weight }} kg</td>
-        <td>
-          <button class="btn btn-danger" type="button" @click="edit(product)">
-            Edit
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </template>
 
 <script lang="ts">
 import {Options, Vue} from "vue-class-component";
 import {AxiosResponse} from "axios";
 import {Product} from "@/custom-types/Product";
+import ProductTable from "@/components/ProductsTable.vue";
 
 @Options({
   name: "Products",
@@ -40,6 +16,9 @@ import {Product} from "@/custom-types/Product";
     return {
       products: [] as Product[],
     }
+  },
+  components: {
+    ProductTable
   },
   methods: {
     edit(product: Product) {

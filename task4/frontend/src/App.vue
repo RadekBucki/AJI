@@ -9,17 +9,17 @@
           @mouseover="showCart=($route.name !== 'cart')"
           @mouseleave="showCart=false">
         <router-link class="nav-link" to="/cart" @mousedown="showCart=false">
-          <CartIcon />
+          <CartIcon/>
           ({{ cart.totalQuantity }})
         </router-link>
         <div class="cart position-absolute bg-light p-4 shadow-lg rounded-3" v-show="showCart">
-          <cart-component :cart="cart" />
+          <CartComponent :cart="cart"/>
         </div>
       </li>
     </ul>
   </nav>
 
-  <router-view :cart="cart" />
+  <router-view :cart="cart"/>
 </template>
 
 <style>

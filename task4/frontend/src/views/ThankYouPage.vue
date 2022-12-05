@@ -13,9 +13,7 @@
           </div>
           <div class="text-center">
             <h1>Dziękujemy za zakupy w naszym sklepie!</h1>
-            <button class="btn btn-outline-success" @click="$router.push({path: '/'})">
-              Wróć na stronę główną
-            </button>
+            <router-link to="/" class="btn btn-outline-success">Wróć na stronę główną</router-link>
           </div>
         </div>
       </div>
