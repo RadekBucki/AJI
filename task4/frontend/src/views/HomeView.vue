@@ -10,6 +10,7 @@ import ProductTable from "@/components/ProductsTable.vue";
 import {Cart} from "@/custom-types/Cart";
 
 @Options({
+  name: "HomeView",
   components: {
     ProductTable
   },
