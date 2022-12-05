@@ -123,6 +123,7 @@ export class Cart {
                 return;
             }
         })
+        localStorage.cart = JSON.stringify(this);
     }
 
     get totalQuantity(): number {
