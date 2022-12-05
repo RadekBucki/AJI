@@ -14,21 +14,6 @@ export class Cart {
         }
     }
 
-    public cartChangeMultiple(newNumber: number, product: Product) {
-        const quantity = product.quantity;
-        if (newNumber > quantity) {
-            this.addMultiple(newNumber - quantity, product)
-        } else if (newNumber < quantity) {
-            this.decrementMultiple(quantity - newNumber, product)
-        }
-    }
-
-    public decrementMultiple(numToAdd: number, product: Product) {
-        for (let i = 0; i < numToAdd; i++) {
-            this.decrementItem(product)
-        }
-    }
-
     public decrementItem(product: Product) {
         const itemIndex = this._items.findIndex((item) => product.sku == item.sku);
         if (itemIndex === -1) {
@@ -54,12 +39,6 @@ export class Cart {
         this._totalQuantity -= item.quantity;
         this._totalValue -= item.quantity * item.unit_price;
         localStorage.cart = JSON.stringify(this);
-    }
-
-    public addMultiple(numToAdd: number, product: Product) {
-        for (let i = 0; i < numToAdd; i++) {
-            this.add(product)
-        }
     }
 
     public add(product: Product) {
