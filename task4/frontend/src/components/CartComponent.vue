@@ -89,7 +89,6 @@ import {AxiosResponse} from "axios";
   },
   data() {
     return {
-      wasValidated: false,
       name: '',
       email: '',
       phone: '',
@@ -104,7 +103,6 @@ import {AxiosResponse} from "axios";
   },
   methods: {
     validate: function () {
-      this.wasValidated = false;
       this.errors = {
         name: [],
         email: [],
@@ -128,12 +126,9 @@ import {AxiosResponse} from "axios";
       if (!this.phone.match(/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im)) {
         this.errors.phone.push('Numer telefonu musi być poprawny.');
       }
-      if (!this.errors.phone.length && !this.errors.email.length && !this.errors.name.length) {
-          this.wasValidated = true;
-      }
     },
     async placeOrder() {
-      if (!this.wasValidated) {
+      if (this.errors.phone.length || this.errors.email.length || this.errors.name.length) {
         return;
       }
       await this.$axios.post('/orders', {
