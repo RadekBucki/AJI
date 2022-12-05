@@ -52,6 +52,11 @@ declare module '@vue/runtime-core' {
   components: {
     CartPlusIcon
   },
+  methods: {
+    edit(product: Product) {
+      this.$router.push({path: '/admin/dashboard/products/edit/' + product.sku});
+    }
+  },
   props: {
     cart: Cart
   },

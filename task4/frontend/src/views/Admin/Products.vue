@@ -20,11 +20,6 @@ import ProductTable from "@/components/ProductsTable.vue";
   components: {
     ProductTable
   },
-  methods: {
-    edit(product: Product) {
-      this.$router.push({path: '/admin/dashboard/products/edit/' + product.sku});
-    }
-  },
   async mounted() {
     await this.$axios.get('/products')
         .then((response: AxiosResponse) => {
