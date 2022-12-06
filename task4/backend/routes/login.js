@@ -1,9 +1,9 @@
 const express = require("express");
-require('dotenv').config();
 const router = express.Router();
 const UserToken = require('../classes/UserToken');
+require('dotenv').config();
 
-router.post('/', function (req, res) {
+router.post('/', (req, res) => {
     const params = {...req.body};
     const token = UserToken.generateAccessToken(params.user, params.password)
     if (token === null) {
