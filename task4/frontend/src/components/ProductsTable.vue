@@ -12,7 +12,13 @@
     <div class="form-group">
       <label for="category">Kategoria</label>
       <select class="form-control" id="category" v-model="filters.category_code">
-        <option v-for="category in categories" :value="category.category_code">{{ category.name }}</option>
+        <option v-for="category in categoryOptions" :value="category.category_code">{{ category.name }}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="category">Sortowanie</label>
+      <select class="form-control" id="category" v-model="filters.sortingOptionCode">
+        <option v-for="sortingOption in sortingOptions" :value="sortingOption.optionCode">{{ sortingOption.name }}</option>
       </select>
     </div>
     <div class="form-group mt-1">
@@ -58,6 +64,7 @@ import {Product} from '@/custom-types/Product'
 import {Cart} from "@/custom-types/Cart";
 import {Category} from "@/custom-types/Category";
 import {AxiosError} from "axios";
+import {SortingOption} from "@/custom-types/SortingOption";
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -75,12 +82,19 @@ declare module '@vue/runtime-core' {
       this.$router.push({path: '/admin/dashboard/products/edit/' + product.sku});
     },
     search() {
-      console.log('search');
       let allProducts = this.allProducts;
       let filters = this.filters;
       this.filteredProducts = allProducts.filter((product: Product) => {
         return (product.name === '' || product.name.toLowerCase().includes(filters.name.toLowerCase()))
         && (filters.category_code === '' || product.category_code === filters.category_code)
+      });
+      if (filters.sortingOptionCode === '') {
+        return;
+      }
+      const sortBy = this.filters.sortingOptionCode.split('-');
+      sortBy[1] = sortBy[1] === 'asc' ? 1 : -1;
+      this.filteredProducts = this.filteredProducts.sort((product1: any, product2: any) => {
+        return ((product1[sortBy[0]] > product2[sortBy[0]]) ? 1 : -1) * sortBy[1];
       });
     },
     clear(stringToClear: string) {
@@ -97,9 +111,19 @@ declare module '@vue/runtime-core' {
       filteredProducts: [] as Product[],
       filters: {
         name: "",
-        category_code: ""
+        category_code: "",
+        sortingOptionCode: ""
       },
-      categories: [] as Category[],
+      categoryOptions: [] as Category[],
+      sortingOptions: [
+        {optionCode: '', name: 'Wybierz kolejność sortowania'},
+        {optionCode: 'name-asc', name: 'Nazwa A-Z'},
+        {optionCode: 'name-desc', name: 'Nazwa Z-A'},
+        {optionCode: 'unit_price-asc', name: 'Cena od najmniejszej'},
+        {optionCode: 'unit_price-desc', name: 'Cena od największej'},
+        {optionCode: 'unit_weight-asc', name: 'Waga od najmniejszej'},
+        {optionCode: 'unit_weight-desc', name: 'Waga od największej'},
+      ] as SortingOption[]
     }
   },
   async mounted() {
@@ -110,13 +134,13 @@ declare module '@vue/runtime-core' {
         });
     await this.$axios.get('/categories/')
         .then((response: AxiosResponse) => {
-        this.categories = response.data.data;
-        this.categories.unshift({
+        this.categoryOptions = response.data.data;
+        this.categoryOptions.unshift({
           category_code: "",
           name: "Wybierz kategorię"
         });
     }).catch((reason: AxiosError) => {
-      this.categories = [];
+      this.categoryOptions = [];
     });
   }
 })
