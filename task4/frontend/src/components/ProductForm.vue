@@ -60,7 +60,7 @@ import {Error, ErrorResponse} from "@/custom-types/ErrorResponse";
       categories: [] as Category[],
       isError: false,
       errors: [] as Error[],
-      isEdit: true as boolean
+      isEdit: true
     }
   },
   methods: {
@@ -81,7 +81,7 @@ import {Error, ErrorResponse} from "@/custom-types/ErrorResponse";
         }
       }).then((response: AxiosResponse) => {
         this.product = response.data.data;
-        this.$router.push({path: '/admin/dashboard/products/edit/' + this.product.sku})
+        this.$router.push({path: '/admin/dashboard/products/'})
       }).catch((reason: AxiosError) => {
         this.isError = true;
         this.errors = (reason.response?.data as ErrorResponse).errors;

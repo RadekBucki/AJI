@@ -10,34 +10,39 @@
   </select>
   <table class="table table-stripped table-hover">
     <thead>
-      <tr>
-        <th>Data zatwierdzenia</th>
-        <th>Wartość</th>
-        <th>Produkty</th>
-        <th></th>
-      </tr>
+    <tr>
+      <th>Data zatwierdzenia</th>
+      <th>Wartość</th>
+      <th>Produkty</th>
+      <th>Dane kupującego</th>
+      <th></th>
+    </tr>
     </thead>
     <tbody>
-      <tr v-for="order in orders">
-        <td>{{ (new Date(order.creation_date)).toLocaleString() }}</td>
-        <td>
-          {{
-            order.products
-                 .reduce(
-                (accumulator, product) => accumulator + product.quantity * product.price,
-                0
-            )
-          }} zł
-        </td>
-        <td>
-          <span v-for="product in order.products">{{ product.name }} - {{ product.quantity }}<br></span>
-        </td>
-        <td>
-          <select class="form-select" aria-label="Stan zamówienia" v-model="order.status_code" @change="edit(order)">
-            <option v-for="status in ordersStatuses" :value="status.code">{{ status.name }}</option>
-          </select>
-        </td>
-      </tr>
+    <tr v-for="order in orders">
+      <td>{{ (new Date(order.creation_date)).toLocaleString() }}</td>
+      <td>
+        {{
+          order.products.reduce(
+              (accumulator, product) => accumulator + product.quantity * product.price, 0)
+        }} zł
+      </td>
+      <td>
+        <span v-for="product in order.products">{{ product.name }} - {{ product.quantity }}<br></span>
+      </td>
+      <td>
+        <span>
+          {{ order.user_name }} <br>
+          {{ order.email }} <br>
+          {{ order.phone }}
+        </span>
+      </td>
+      <td>
+        <select class="form-select" aria-label="Stan zamówienia" v-model="order.status_code" @change="edit(order)">
+          <option v-for="status in ordersStatuses" :value="status.code">{{ status.name }}</option>
+        </select>
+      </td>
+    </tr>
     </tbody>
   </table>
 

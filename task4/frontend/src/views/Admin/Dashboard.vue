@@ -14,7 +14,6 @@
               <router-link class="nav-link align-middle px-0 text-light" to="/admin/dashboard/orders">Zamówienia</router-link>
             </li>
           </ul>
-          <hr>
           <div class="dropdown pb-4 bottom-0 sticky-bottom">
             <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
                id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,6 +43,11 @@ import {Options, Vue} from "vue-class-component";
   methods: {
     signOut() {
       localStorage.removeItem('token');
+      this.$router.push({path: '/admin'});
+    }
+  },
+  async mounted() {
+    if (localStorage.getItem('token') === null) {
       this.$router.push({path: '/admin'});
     }
   }
