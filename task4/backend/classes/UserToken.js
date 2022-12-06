@@ -15,20 +15,16 @@ function generateAccessToken(username, password) {
 }
 
 function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
+    const authHeader = req.headers['authorization'];
+    const token = authHeader?.replace('Bearer ','');
     if (token == null) return res.status(401).json({errors: [{message: 'Brak tokenu.'}]});
 
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, data) => {
-        if (
-            err ||
-            data.username !== process.env.ADMIN_USER ||
-            data.password !== process.env.ADMIN_PASSWORD
-        ) {
-            return res.status(403).json({errors: [{message: 'Brak uprawnień do operacji'}]});
-        }
+    try {
+        jwt.verify(token, process.env.TOKEN_SECRET);
         next();
-    })
+    } catch (e) {
+        return res.status(403).json({errors: [{message: 'Brak uprawnień do operacji'}]});
+    }
 }
 
 module.exports = {generateAccessToken, authenticateToken};
