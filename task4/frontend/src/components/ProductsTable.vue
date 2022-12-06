@@ -3,6 +3,22 @@
     <h1>Produkty</h1>
     <router-link to="/admin/dashboard/products/new" class="btn btn-lg btn-success">Utwórz nowy</router-link>
   </div>
+  <form class="mb-1 mt-1">
+    <div class="form-group">
+      <label for=inputTitle>Nazwa</label>
+      <input type="text" id=inputTitle v-model="filters.name" v-on:keyup.enter="search" v-on:keyup.esc="clear('name')"
+             class="form-control" placeholder="Podaj szukaną nazwę" />
+    </div>
+    <div class="form-group">
+      <label for="category">Kategoria</label>
+      <select class="form-control" id="category" v-model="filters.category_code">
+        <option v-for="category in categories" :value="category.category_code">{{ category.name }}</option>
+      </select>
+    </div>
+    <div class="form-group mt-1">
+      <input type="button" class="btn btn-primary col-sm-12" value="Szukaj" @click="search" />
+    </div>
+  </form>
   <table class="table table-stripped table-hover">
     <thead>
     <tr>
@@ -15,7 +31,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-for="product in products">
+    <tr v-for="product in filteredProducts">
       <td>{{ product.name }}</td>
       <td>{{ product.category_name }}</td>
       <td>{{ product.description }}</td>
@@ -40,6 +56,8 @@ import {Options, Vue} from 'vue-class-component';
 import type {AxiosInstance, AxiosResponse} from 'axios';
 import {Product} from '@/custom-types/Product'
 import {Cart} from "@/custom-types/Cart";
+import {Category} from "@/custom-types/Category";
+import {AxiosError} from "axios";
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -55,6 +73,19 @@ declare module '@vue/runtime-core' {
   methods: {
     edit(product: Product) {
       this.$router.push({path: '/admin/dashboard/products/edit/' + product.sku});
+    },
+    search() {
+      console.log('search');
+      let allProducts = this.allProducts;
+      let filters = this.filters;
+      this.filteredProducts = allProducts.filter((product: Product) => {
+        return (product.name === '' || product.name.toLowerCase().includes(filters.name.toLowerCase()))
+        && (filters.category_code === '' || product.category_code === filters.category_code)
+      });
+    },
+    clear(stringToClear: string) {
+      this.filters[stringToClear] = '';
+      this.search();
     }
   },
   props: {
@@ -62,14 +93,31 @@ declare module '@vue/runtime-core' {
   },
   data() {
     return {
-      products: [] as Product[],
+      allProducts: [] as Product[],
+      filteredProducts: [] as Product[],
+      filters: {
+        name: "",
+        category_code: ""
+      },
+      categories: [] as Category[],
     }
   },
   async mounted() {
     await this.$axios.get('/products')
         .then((response: AxiosResponse) => {
-          this.products = response.data.data;
+          this.filteredProducts = response.data.data;
+          this.allProducts = response.data.data;
         });
+    await this.$axios.get('/categories/')
+        .then((response: AxiosResponse) => {
+        this.categories = response.data.data;
+        this.categories.unshift({
+          category_code: "",
+          name: "Wybierz kategorię"
+        });
+    }).catch((reason: AxiosError) => {
+      this.categories = [];
+    });
   }
 })
 

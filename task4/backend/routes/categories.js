@@ -12,7 +12,7 @@ const connectionData = {
     password: process.env.PASSWORD,
     database: process.env.DATABASE
 };
-router.get('/', UserToken.authenticateToken, function (req, res) {
+router.get('/', function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
     connection.query('SELECT category_code, name FROM category',
