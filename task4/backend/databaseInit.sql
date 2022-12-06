@@ -62,7 +62,7 @@ VALUES ('disks', 'Dyski');
 INSERT INTO final_application.category (category_code, name)
 VALUES ('cases', 'Obudowy');
 INSERT INTO final_application.order_status (code, name)
-VALUES ('not_approved', 'NIEZATWIERDZONE');
+VALUES ('not_approved', 'NIE ZATWIERDZONE');
 INSERT INTO final_application.order_status (code, name)
 VALUES ('approved', 'ZATWIERDZONE');
 INSERT INTO final_application.order_status (code, name)
@@ -108,3 +108,13 @@ INSERT INTO final_application.product (sku, name, description, unit_price, unit_
 INSERT INTO final_application.product (sku, name, description, unit_price, unit_weight, category_id) VALUES ('mini-tower-case', 'Obudowa Mini Tower', 'Wykorzystuje wszystkie funkcje obudowy ATX z podstawową wydajnością i wykorzystuje je efektywnie na mniej niż połowie objętości. Wszystkie funkcje zostały starannie zaprojektowane w 18-litrowej obudowie', 369, 5.1, 7);
 INSERT INTO final_application.product (sku, name, description, unit_price, unit_weight, category_id) VALUES ('micro-tower-case', 'Obudowa Micro Tower', 'Obudowa jest tak skonstruowana, aby zaraz po wyjęciu z pudełka zadowoliła jakością i dużym potencjałem chłodzenia. Główne wyróżnienia obejmują wentylowany panel przedni i jeden z naszych dynamicznych wentylatorów PWM o mocy 180 x 38 mm w celu uzyskania maksymalnego chłodzenia powietrza przy zachowaniu kontrolowanego poziomu hałasu.', 599, 5.5, 7);
 INSERT INTO final_application.product (sku, name, description, unit_price, unit_weight, category_id) VALUES ('full-tower-case', 'Obudowa Full Tower', 'Otwarta wentylacja i wiele wsporników wentylatorów zapewnia przepływ powietrza tam', 1309, 14.39, 7);
+
+create trigger status_change
+    before update
+    on order_entity
+    for each row
+begin
+    IF(NEW.order_status_id<OLD.order_status_id AND NEW.order_status_id < 3) THEN
+        signal sqlstate '45000' set message_text = 'Impossible transition between statuses.';
+    end if;
+end;
