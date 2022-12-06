@@ -86,6 +86,25 @@ export class Cart {
         localStorage.cart = JSON.stringify(this);
     }
 
+    public calculateTotalQuantityAndValue() {
+        this._totalQuantity = 0;
+        this._totalValue = 0;
+        this.items.forEach(item => {
+            this._totalQuantity += Number(item.quantity);
+            this._totalValue += Number(item.unit_price) * Number(item.quantity);
+            // @ts-ignore
+            if (item.quantity !== '' && Number(item.quantity) === 0) {
+                this.removeItem(item);
+            }
+            if (Number(item.quantity) === Number.NaN || Number(item.quantity) < 0) {
+                this._totalQuantity = 0;
+                this._totalValue = 0;
+                return;
+            }
+        })
+        localStorage.cart = JSON.stringify(this);
+    }
+
     get totalQuantity(): number {
         return this._totalQuantity;
     }

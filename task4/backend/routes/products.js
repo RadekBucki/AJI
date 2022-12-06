@@ -2,6 +2,7 @@ var mysql = require('mysql');
 var express = require('express');
 const {ER_BAD_NULL_ERROR, ER_DUP_ENTRY} = require('mysql/lib/protocol/constants/errors');
 require('dotenv').config();
+const UserToken = require('../classes/UserToken');
 
 var router = express.Router();
 
@@ -16,8 +17,8 @@ const getProduct = function (req, res) {
     const sku = req.params.sku;
     var connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name" FROM product ' +
-        'JOIN category ON category.id=product.category_id = category.id ' +
+    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name",category.category_code as category_code FROM product ' +
+        'JOIN category ON category.id=product.category_id ' +
         'WHERE product.sku="' + sku + '"',
         function (error, results) {
             if (error) {
@@ -36,7 +37,7 @@ router.get('/:sku', getProduct);
 router.get('/', function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.name as "category_name" FROM product ' +
+    connection.query('SELECT sku,product.name,description,unit_price,unit_weight,category.category_code as category_code, category.name as "category_name" FROM product ' +
         'JOIN category ON category.id=product.category_id',
         function (error, results) {
             if (error) {
@@ -49,7 +50,7 @@ router.get('/', function (req, res) {
     connection.end();
 });
 
-router.post('/', function (req, res) {
+router.post('/', UserToken.authenticateToken, function (req, res) {
     const requiredParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
     const params = {...req.body};
 
@@ -87,7 +88,8 @@ router.post('/', function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
     connection.query('INSERT INTO product (sku, name, description, unit_price, unit_weight, category_id) ' +
-        'VALUES (' + Object.values(params).join() + ')',
+        'VALUES (' + params.sku + ',' + params.name + ',' + params.description + ',' + params.unit_price +
+        ',' + params.unit_weight + ',' + params.category_id + ')',
         function (error) {
             if (error) {
                 console.log(error);
@@ -107,7 +109,7 @@ router.post('/', function (req, res) {
     connection.end();
 });
 
-router.put('/:sku', function (req, res) {
+router.put('/:sku', UserToken.authenticateToken, function (req, res) {
     const allowedParams = ['sku', 'name', 'description', 'unit_price', 'unit_weight', 'category_code'];
     const params = {...req.body};
 
@@ -137,11 +139,11 @@ router.put('/:sku', function (req, res) {
     if (badRequestErrors.length > 0) {
         return res.status(400).json({errors: badRequestErrors});
     }
-    if ('category_id' in params) {
+    if ('category_code' in params) {
         params.category_id = '(SELECT id FROM category WHERE category.category_code=' + params.category_code + ')';
         delete params.category_code;
     }
-    const updatedFields = Object.entries(params).map(param => param[0] + '=' + param[1]).join(' ');
+    const updatedFields = Object.entries(params).map(param => param[0] + '=' + param[1]).join(', ');
 
     var connection = mysql.createConnection(connectionData);
     connection.connect();
@@ -151,7 +153,7 @@ router.put('/:sku', function (req, res) {
                 console.log(error);
                 const errorResponse = {message: 'Internal server error'};
                 return res.status(errorResponse.code).json({errors: [errorResponse]});
-            } else if (results.changedRows === 0) {
+            } else if (results.changedRows === 0 && results.affectedRows === 0) {
                 return res.status(404).json({errors: [{message: 'Nie odnaleziono.'}]});
             } else {
                 if ('sku' in params) {

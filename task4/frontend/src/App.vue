@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-2">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-2" v-show="!$route.path.includes('admin')">
     <a class="navbar-brand" href="#">Vue&Express Shop</a>
     <ul class="navbar-nav">
       <li class="nav-item">
@@ -7,22 +7,19 @@
       </li>
       <li class="nav-item"
           @mouseover="showCart=($route.name !== 'cart')"
-          @mouseleave="showCart=false"
-      >
-        <router-link class="nav-link" to="/cart">
-          <CartIcon />
+          @mouseleave="showCart=false">
+        <router-link class="nav-link" to="/cart" @mousedown="showCart=false">
+          <CartIcon/>
           ({{ cart.totalQuantity }})
         </router-link>
         <div class="cart position-absolute bg-light p-4 shadow-lg rounded-3" v-show="showCart">
-          <cart-component :cart="cart" />
+          <CartComponent :cart="cart"/>
         </div>
       </li>
     </ul>
   </nav>
 
-  <div class="container mt-4">
-    <router-view :cart="cart" />
-  </div>
+  <router-view :cart="cart"/>
 </template>
 
 <style>

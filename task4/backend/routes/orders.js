@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var express = require('express');
 const {ER_BAD_NULL_ERROR, ER_DUP_ENTRY} = require('mysql/lib/protocol/constants/errors');
+const UserToken = require("../classes/UserToken");
 require('dotenv').config();
 
 var router = express.Router();
@@ -12,16 +13,17 @@ const connectionData = {
     database: process.env.DATABASE
 };
 
-router.get('/', function (req, res) {
+router.get('/', UserToken.authenticateToken, function (req, res) {
     const connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT oi2.*, (\n' +
+    connection.query('SELECT oi2.*, order_status.code as status_code, order_status.name as status_name, (\n' +
         '    SELECT JSON_ARRAYAGG(JSON_OBJECT(\'sku\', p.sku, \'name\', p.name, \'price\', p.unit_price, \'quantity\', oi.quantity))\n' +
         '    FROM order_items oi\n' +
         '             JOIN product p on p.id = oi.product_id\n' +
         '    WHERE order_id=oi2.id\n' +
         ') AS products\n' +
-        'FROM order_entity oi2',
+        'FROM order_entity oi2 ' +
+        'JOIN order_status ON oi2.order_status_id=order_status.id',
         function (error, results) {
             if (error) {
                 console.log(error);
@@ -122,7 +124,7 @@ router.post('/', function (req, res) {
         });
 });
 
-router.put('/:orderId/:statusCode', function (req, res) {
+router.put('/:orderId/:statusCode', UserToken.authenticateToken, function (req, res) {
     var connection = mysql.createConnection(connectionData);
     connection.connect();
     connection.query('UPDATE order_entity ' +
@@ -139,23 +141,26 @@ router.put('/:orderId/:statusCode', function (req, res) {
                 return res.status(errorResponse.code).json({errors: [errorResponse]});
             } else if (results.changedRows === 0) {
                 return res.status(404).json({errors: [{message: 'Nie odnaleziono.'}]});
+            } else if (error?.sqlMessage === 'Impossible transition between statuses.') {
+                return res.status(400).json({errors: [{message: 'Nie dozwolone przejście między statusami.'}]});
             } else {
-                return res.status(200).json({data: []});
+                return res.status(200).json({data: req.body});
             }
         });
     connection.end();
 });
 
-router.get('/status/:statusCode', function (req, res) {
+router.get('/status/:statusCode', UserToken.authenticateToken, function (req, res) {
     const connection = mysql.createConnection(connectionData);
     connection.connect();
-    connection.query('SELECT oi2.*, (\n' +
+    connection.query('SELECT oi2.*, order_status.code as status_code, order_status.name as status_name, (\n' +
         '    SELECT JSON_ARRAYAGG(JSON_OBJECT(\'sku\', p.sku, \'name\', p.name, \'price\', p.unit_price, \'quantity\', oi.quantity))\n' +
         '    FROM order_items oi\n' +
         '             JOIN product p on p.id = oi.product_id\n' +
         '    WHERE order_id=oi2.id\n' +
         ') AS products\n' +
         'FROM order_entity oi2 ' +
+        'JOIN order_status ON oi2.order_status_id=order_status.id ' +
         'WHERE oi2.order_status_id=(SELECT id FROM order_status WHERE code="' + req.params.statusCode + '")',
         function (error, results) {
             if (error) {

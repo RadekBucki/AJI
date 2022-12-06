@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="container mt-4">
     <ProductTable :cart="cart" />
   </div>
 </template>
@@ -10,6 +10,7 @@ import ProductTable from "@/components/ProductsTable.vue";
 import {Cart} from "@/custom-types/Cart";
 
 @Options({
+  name: "HomeView",
   components: {
     ProductTable
   },
