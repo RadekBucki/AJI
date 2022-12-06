@@ -23,12 +23,12 @@
       <td>{{ (new Date(order.creation_date)).toLocaleString() }}</td>
       <td>
         {{
-          order.filteredProducts.reduce(
+          order.products.reduce(
               (accumulator, product) => accumulator + product.quantity * product.price, 0)
         }} zł
       </td>
       <td>
-        <span v-for="product in order.filteredProducts">{{ product.name }} - {{ product.quantity }}<br></span>
+        <span v-for="product in order.products">{{ product.name }} - {{ product.quantity }}<br></span>
       </td>
       <td>
         <span>
