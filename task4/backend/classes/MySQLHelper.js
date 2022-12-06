@@ -10,7 +10,6 @@ const connectionData = {
 
 function executeQuery(req, res, query, errorFunction = (error, results) => {
     if (error) {
-        console.log(error);
         return res.status(500).json({errors: [{message: 'Internal server error'}]});
     } else if (results.length) {
         return res.status(200).json({data: results});

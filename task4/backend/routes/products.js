@@ -68,19 +68,22 @@ router.put('/:sku', UserToken.authenticateToken, function (req, res) {
     }
     if ('category_code' in params) {
         params.category_id = '(SELECT id FROM category WHERE category.category_code=' + params.category_code + ')';
-        delete params.category_id;
+        delete params.category_code;
     }
     const updatedFields = Object.entries(params).map(param => param[0] + '=' + param[1]).join(', ');
 
     MySQLHelper.executeQuery(req, res, 'UPDATE product SET ' + updatedFields + ' WHERE sku="' + req.params.sku + '"',
         (error, results) => {
             if (error) {
+                console.log(error)
                 const errorResponse = {message: 'Internal server error'};
                 return res.status(errorResponse.code).json({errors: [errorResponse]});
             } else if (results.changedRows === 0 && results.affectedRows === 0) {
                 return res.status(404).json({errors: [{message: 'Nie odnaleziono.'}]});
-            } else if ('sku' in params) {
-                req.params.sku = req.body.sku;
+            } else {
+                if ('sku' in params) {
+                    req.params.sku = req.body.sku;
+                }
                 return getProduct(req, res);
             }
         });
