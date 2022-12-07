@@ -4,7 +4,6 @@ const UserToken = require("../classes/UserToken");
 const HTTPRequestValidator = require("../classes/HTTPRequestValidator");
 const MySQLHelper = require("../classes/MySQLHelper");
 const router = express.Router();
-require('dotenv').config();
 
 router.get('/', UserToken.authenticateToken, function (req, res) {
     MySQLHelper.executeQuery(req, res, 'SELECT oi2.*, order_status.code as status_code, order_status.name as status_name, (\n' +

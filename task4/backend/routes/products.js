@@ -4,7 +4,6 @@ const UserToken = require('../classes/UserToken');
 const MySQLHelper = require("../classes/MySQLHelper");
 const HTTPRequestValidator = require("../classes/HTTPRequestValidator");
 const router = express.Router();
-require('dotenv').config();
 
 const getProduct = (req, res) => {
     const sku = req.params.sku;

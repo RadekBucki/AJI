@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const UserToken = require('../classes/UserToken');
-require('dotenv').config();
 
 router.post('/', (req, res) => {
     const params = {...req.body};
