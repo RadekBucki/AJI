@@ -1,4 +1,3 @@
-var mysql = require('mysql');
 const express = require('express');
 const {ER_BAD_NULL_ERROR, ER_DUP_ENTRY} = require('mysql/lib/protocol/constants/errors');
 const UserToken = require("../classes/UserToken");
@@ -6,13 +5,6 @@ const HTTPRequestValidator = require("../classes/HTTPRequestValidator");
 const MySQLHelper = require("../classes/MySQLHelper");
 const router = express.Router();
 require('dotenv').config();
-
-const connectionData = {
-    host: process.env.HOST,
-    user: process.env.USER,
-    password: process.env.PASSWORD,
-    database: process.env.DATABASE
-};
 
 router.get('/', UserToken.authenticateToken, function (req, res) {
     MySQLHelper.executeQuery(req, res, 'SELECT oi2.*, order_status.code as status_code, order_status.name as status_name, (\n' +
@@ -25,7 +17,6 @@ router.get('/', UserToken.authenticateToken, function (req, res) {
         'JOIN order_status ON oi2.order_status_id=order_status.id',
         (error, results) => {
             if (error) {
-                console.log(error);
                 return res.status(500).json({errors: [{message: 'Internal server error'}]});
             } else if (results.length) {
                 results.forEach(

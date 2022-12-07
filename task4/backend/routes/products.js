@@ -75,7 +75,6 @@ router.put('/:sku', UserToken.authenticateToken, function (req, res) {
     MySQLHelper.executeQuery(req, res, 'UPDATE product SET ' + updatedFields + ' WHERE sku="' + req.params.sku + '"',
         (error, results) => {
             if (error) {
-                console.log(error)
                 const errorResponse = {message: 'Internal server error'};
                 return res.status(errorResponse.code).json({errors: [errorResponse]});
             } else if (results.changedRows === 0 && results.affectedRows === 0) {
