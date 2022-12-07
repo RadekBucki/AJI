@@ -106,6 +106,9 @@ router.put('/:orderId/:statusCode', UserToken.authenticateToken, function (req, 
         'WHERE id=' + req.params.orderId,
         (error, results) => {
             if (error) {
+                if (error?.sqlMessage === 'Impossible transition between statuses.') {
+                    return res.status(400).json({errors: [{message: 'Nie dozwolone przejście między statusami.'}]});
+                }
                 const errorResponse = {code: 500, message: 'Internal server error'};
                 if (error.errno === ER_BAD_NULL_ERROR) {
                     errorResponse.code = 400;
@@ -114,8 +117,6 @@ router.put('/:orderId/:statusCode', UserToken.authenticateToken, function (req, 
                 return res.status(errorResponse.code).json({errors: [errorResponse]});
             } else if (results.changedRows === 0) {
                 return res.status(404).json({errors: [{message: 'Nie odnaleziono.'}]});
-            } else if (error?.sqlMessage === 'Impossible transition between statuses.') {
-                return res.status(400).json({errors: [{message: 'Nie dozwolone przejście między statusami.'}]});
             } else {
                 return res.status(200).json({data: req.body});
             }
