@@ -74,14 +74,11 @@ router.post('/', function (req, res) {
         return res.status(400).json({errors: badRequestErrors});
     }
 
-    const connection = mysql.createConnection(connectionData);
-    connection.connect();
-    connection.query('INSERT INTO order_entity (user_name, email, phone, order_status_id)\n' +
+    MySQLHelper.executeQueries(req, res, 'INSERT INTO order_entity (user_name, email, phone, order_status_id)\n' +
         '    VALUES ("' + params.buyer.username + '", "' + params.buyer.email + '", "' + params.buyer.phone + '", ' +
         '   (SELECT id FROM order_status WHERE code = "not_approved"))',
-        function (error, results) {
+        (error) => {
             if (error) {
-                console.log(error);
                 const errorResponse = {code: 500, message: 'Internal server error'};
                 if (error.errno === ER_DUP_ENTRY) {
                     errorResponse.code = 409;
@@ -91,25 +88,25 @@ router.post('/', function (req, res) {
                     errorResponse.message = 'Podano nieprawidłowe dane.';
                 }
                 return res.status(errorResponse.code).json({errors: [{message: errorResponse.message}]});
-            } else {
-                params.products.forEach((product) => {
-                    connection.query('INSERT INTO order_items(order_id, product_id, quantity) VALUES (' + results.insertId +
-                        ', (SELECT id FROM product WHERE sku="' + product.sku + '"), ' + product.quantity + ');',
-                        function (error) {
-                            if (error) {
-                                console.log(error);
-                                const errorResponse = {code: 500, message: 'Internal server error'};
-                                if (error.errno === ER_BAD_NULL_ERROR) {
-                                    errorResponse.code = 400;
-                                    errorResponse.message = 'Nie istnieje produkt o podanym sku.';
-                                }
-                                return res.status(errorResponse.code).json({errors: [{message: errorResponse.message}]});
-                            }
-                        });
-                })
-                return res.status(201).json({data: req.body});
             }
+        }
+    ).then((results) => {
+        params.products.forEach((product) => {
+            MySQLHelper.executeQueries(res, res, 'INSERT INTO order_items(order_id, product_id, quantity) VALUES (' + results.insertId +
+                ', (SELECT id FROM product WHERE sku="' + product.sku + '"), ' + product.quantity + ');',
+                (error) => {
+                    if (error) {
+                        const errorResponse = {code: 500, message: 'Internal server error'};
+                        if (error.errno === ER_BAD_NULL_ERROR) {
+                            errorResponse.code = 400;
+                            errorResponse.message = 'Nie istnieje produkt o podanym sku.';
+                        }
+                        return res.status(errorResponse.code).json({errors: [{message: errorResponse.message}]});
+                    }
+                });
         });
+        return res.status(201).json({data: req.body});
+    });
 });
 
 router.put('/:orderId/:statusCode', UserToken.authenticateToken, function (req, res) {

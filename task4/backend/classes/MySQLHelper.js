@@ -23,4 +23,20 @@ function executeQuery(req, res, query, errorFunction = (error, results) => {
     connection.end();
 }
 
-module.exports = {executeQuery}
+function executeQueries(req, res, query, errorFunction) {
+    return new Promise(((resolve, reject) => {
+        const connection = mysql.createConnection(connectionData);
+        connection.connect();
+        connection.query(query, (error, results) => {
+            let errors = errorFunction(error);
+            if (errors) {
+                reject(errors);
+            } else {
+                resolve(results);
+            }
+        });
+        connection.end();
+    }));
+}
+
+module.exports = {executeQuery, executeQueries}
