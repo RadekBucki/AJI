@@ -97,7 +97,7 @@ import {Error, ErrorResponse} from "@/custom-types/ErrorResponse";
         }
       }).then((response: AxiosResponse) => {
         this.product = response.data.data;
-        this.$router.push({path: '/admin/dashboard/products/edit/' + this.product.sku})
+        this.$router.push({path: '/admin/dashboard/products/'})
       }).catch((reason: AxiosError) => {
         this.isError = true;
         this.errors = (reason.response?.data as ErrorResponse).errors;
@@ -109,7 +109,7 @@ import {Error, ErrorResponse} from "@/custom-types/ErrorResponse";
     if (this.isEdit) {
       await this.$axios.get('/products/' + this.sku)
           .then((response: AxiosResponse) => {
-            this.product = response.data.data;
+            this.product = response.data.data[0];
           }).catch((reason: AxiosError) => {
             this.isError = true;
             this.errors = (reason.response?.data as ErrorResponse).errors;
