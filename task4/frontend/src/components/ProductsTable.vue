@@ -3,28 +3,29 @@
     <h1>Produkty</h1>
     <router-link to="/admin/dashboard/products/new" class="btn btn-lg btn-success">Utwórz nowy</router-link>
   </div>
-  <form class="mb-1 mt-1">
-    <div class="form-group">
-      <label for=inputTitle>Nazwa</label>
-      <input type="text" id=inputTitle v-model="filters.name" v-on:keyup.enter="search" v-on:keyup.esc="clear('name')"
-             class="form-control" placeholder="Podaj szukaną nazwę" />
-    </div>
-    <div class="form-group">
-      <label for="category">Kategoria</label>
-      <select class="form-control" id="category" v-model="filters.category_code">
-        <option v-for="category in categoryOptions" :value="category.category_code">{{ category.name }}</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label for="category">Sortowanie</label>
-      <select class="form-control" id="category" v-model="filters.sortingOptionCode">
-        <option v-for="sortingOption in sortingOptions" :value="sortingOption.optionCode">{{ sortingOption.name }}</option>
-      </select>
-    </div>
-    <div class="form-group mt-1">
-      <input type="button" class="btn btn-primary col-sm-12" value="Szukaj" @click="search" />
-    </div>
-  </form>
+  <div class="form-group">
+    <label for=inputTitle>Nazwa</label>
+    <input type="text" id=inputTitle v-model="filters.name" v-on:keyup.enter="search" v-on:keyup.esc="clear('name')"
+           class="form-control" placeholder="Podaj szukaną nazwę"/>
+  </div>
+  <div class="form-group">
+    <label for="category">Kategoria</label>
+    <select class="form-control" id="category" v-model="filters.category_code">
+      <option v-for="category in categoryOptions" :value="category.category_code">{{ category.name }}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label for="category">Sortowanie</label>
+    <select class="form-control" id="category" v-model="filters.sortingOptionCode">
+      <option v-for="sortingOption in sortingOptions" :value="sortingOption.optionCode">{{
+          sortingOption.name
+        }}
+      </option>
+    </select>
+  </div>
+  <div class="form-group mt-1">
+    <input type="button" class="btn btn-primary col-sm-12" value="Szukaj" @click="search"/>
+  </div>
   <table class="table table-stripped table-hover">
     <thead>
     <tr>
@@ -44,8 +45,9 @@
       <td>{{ product.unit_price }} zł</td>
       <td>{{ product.unit_weight }} kg</td>
       <td>
-        <button class="btn btn-primary" type="button" @click="cart.add(product)" v-show="!$route.path.includes('admin')">
-          <CartPlusIcon />
+        <button class="btn btn-primary" type="button" @click="cart.add(product)"
+                v-show="!$route.path.includes('admin')">
+          <CartPlusIcon/>
         </button>
         <button class="btn btn-danger" type="button" @click="edit(product)" v-show="$route.path.includes('admin')">
           Edit
@@ -86,7 +88,7 @@ declare module '@vue/runtime-core' {
       let filters = this.filters;
       this.filteredProducts = allProducts.filter((product: Product) => {
         return (product.name === '' || product.name.toLowerCase().includes(filters.name.toLowerCase()))
-        && (filters.category_code === '' || product.category_code === filters.category_code)
+            && (filters.category_code === '' || product.category_code === filters.category_code)
       });
       if (filters.sortingOptionCode === '') {
         return;
@@ -134,14 +136,14 @@ declare module '@vue/runtime-core' {
         });
     await this.$axios.get('/categories/')
         .then((response: AxiosResponse) => {
-        this.categoryOptions = response.data.data;
-        this.categoryOptions.unshift({
-          category_code: "",
-          name: "Wybierz kategorię"
+          this.categoryOptions = response.data.data;
+          this.categoryOptions.unshift({
+            category_code: "",
+            name: "Wybierz kategorię"
+          });
+        }).catch((reason: AxiosError) => {
+          this.categoryOptions = [];
         });
-    }).catch((reason: AxiosError) => {
-      this.categoryOptions = [];
-    });
   }
 })
 
